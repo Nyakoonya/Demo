@@ -5,6 +5,7 @@ import webpack, { Configuration as WebpackConfiguration } from "webpack";
 import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
 import baseConfig from "./webpack.base";
 import WebpackDevServer from "webpack-dev-server";
+import ReactRefreshWebpackPlugin from "@pmmmwh/react-refresh-webpack-plugin";
 // 运行命令的时候重启一次打开一个tab 页很烦，所以呢优化一下
 // 参考：create-react-app 的启动方式
 // https://github.com/facebook/create-react-app/blob/main/packages/react-dev-utils/openChrome.applescript
@@ -28,6 +29,9 @@ const devConfig: Configuration = merge(baseConfig, {
   - 开发中,我们每行代码不会写的太长,只需要定位到行就行,所以加上 cheap
   - 我们希望能够找到源代码的错误,而不是打包后的,所以需要加上 module
 */
+plugins: [
+  new ReactRefreshWebpackPlugin(), // 添加热更新插件
+],
 });
 const devServer = new WebpackDevServer(
   {
