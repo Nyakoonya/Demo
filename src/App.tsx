@@ -1,6 +1,7 @@
 // import React from "react";
+import { Routes } from 'react-router-dom'
+import RouteTable from '@/router'
 import '@/App.css'
-
 import lessStyles from './app.less'
 import scssStyles from './app.scss'
 import stylStyles from './app.styl'
@@ -21,6 +22,9 @@ function App() {
       <div className={stylStyles['box']}>stylBox</div>
     </div>
     <Class />
+    {/*  */}
+
+    <RouteTable />
   </div>
 }
 
