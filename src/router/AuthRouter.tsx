@@ -8,8 +8,8 @@ export default function AuthRouter(props: Iprops) {
     const location = useLocation();
     // const token = getToken();
     // if(token)
-    // const token = '11';
-    const token = null;
+    const token = '11';
+    // const token = null;
     if (token) {
         if (location.pathname == '/login') {
             return <Navigate to={'/'} replace={true}></Navigate>

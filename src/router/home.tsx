@@ -13,7 +13,7 @@ const routes: SyncRoute.Routes[] = [
   },
   {
     path: "/folders",
-    element: lazy(() => import("../views/Folders")),
+    element: lazy(() => import("../views/Home")),
   },
 ];
 
