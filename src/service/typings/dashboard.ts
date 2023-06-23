@@ -1,0 +1,3 @@
+interface IDashboardsRes {
+    list: any[]
+}

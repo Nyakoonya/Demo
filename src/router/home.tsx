@@ -15,6 +15,10 @@ const routes: SyncRoute.Routes[] = [
     path: "/folders",
     element: lazy(() => import("../views/Home")),
   },
+  {
+    path: "/folders/:id",
+    element: lazy(() => import("../views/Folders")),
+  },
 ];
 
 export default routes;

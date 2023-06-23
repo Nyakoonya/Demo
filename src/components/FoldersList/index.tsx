@@ -1,19 +1,21 @@
 import styles from './styles.scss'
 
-interface IfolderList {
+interface IFolderList {
     title: string,
     id: number,
     img: string
 }
+type IOpenFunc = (id: number) => void
 interface Iprops {
-    list: IfolderList[]
+    list: IFolderList[],
+    onOpen: IOpenFunc
 }
-function Folders(props: Iprops) {
-    const { list } = props
+function FoldersList(props: Iprops) {
+    const { list, onOpen } = props
     return (
         <div className={styles['folders-wrap']}>
             {list.map((item, i) => (
-                <div className={styles['folder-card']} key={item.id}>
+                <div className={styles['folder-card']} key={item.id} onClick={() => onOpen(item.id)}>
                     <div className={styles['folder-img']}>
                         <img src={item.img} ></img>
                     </div>
@@ -27,4 +29,4 @@ function Folders(props: Iprops) {
     )
 }
 
-export default Folders
+export default FoldersList

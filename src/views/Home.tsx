@@ -1,13 +1,19 @@
 import { IRootState } from '@/redux/Store';
-import Folders from '../components/Folders'
 import styles from './styles.scss'
 import { connect } from 'react-redux';
-import { IDashboardState } from '@/redux/reducers/DashboardReducer';
+import { IFolderState } from '@/redux/reducers/FolderReducer';
+import FoldersList from '../components/FoldersList';
+import { loadDashboardsLogic } from '@/redux/actionCreators/entities/dashboard/logic';
+import { Dispatch } from 'react';
+type IOpenFunc = (id: number) => void
 interface Iprops {
-    dashboards: IDashboardState
+    loadDashboards: IOpenFunc;
+    folders: IFolderState,
+
 }
 function Home(props: Iprops) {
-    console.log('props.dashboards----->>>>', props.dashboards)
+    console.log('props.folders----->>>>', props.folders)
+
     const testList = [
         {
             title: 'test',
@@ -38,16 +44,21 @@ function Home(props: Iprops) {
     return (
         <>
             <div className={styles['create-box']}>
-                <div className={styles['create-btn']}>Create your dashborad</div>
+                <div className={styles['create-btn']}>New Folder</div>
             </div>
-            <Folders list={testList} />
+            <FoldersList list={testList}  onOpen={props.loadDashboards}/>
         </>
     );
 }
 const mapStateToProps = (states: IRootState) => {
     console.log('states', states)
     return {
-        dashboards: states.dashboards
+        folders: states.folders
     }
 }
-export default connect(mapStateToProps)(Home);
+const mapDispatchToProps = (dispatch: Dispatch<any>) => {
+    return {
+        loadDashboards: (id: number) => dispatch(loadDashboardsLogic(id))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

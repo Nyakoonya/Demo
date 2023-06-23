@@ -13,53 +13,72 @@ import { LOADING, SUCCESS, FAILURE } from "../Status";
 import { AddDashboardActionType } from "../actionTypes/entities/dashboard/addDashoboardTypes";
 import { UpdateDashboardActionType } from "../actionTypes/entities/dashboard/updateDashboardTypes";
 import { DeleteDashboardActionType } from "../actionTypes/entities/dashboard/deleteDashboardTypes";
+import {
+  LOAD_DASHBOARDS,
+  LOAD_DASHBOARDS_FAIL,
+  LOAD_DASHBOARDS_SUCCESS,
+  LoadDashboardsActionType,
+} from "../actionTypes/entities/dashboard/loadDashboardsTypes";
 
 export interface IDashboardState {
-  entity: any[],
-  status: string
+  entity: any[];
+  status: string;
 }
 const initialState = {
   entity: [],
-  status: LOADING
-}
+  status: LOADING,
+};
 const dashoboradReducers = (
   state: IDashboardState = initialState,
   action:
+    | LoadDashboardsActionType
     | AddDashboardActionType
     | UpdateDashboardActionType
     | DeleteDashboardActionType
 ): IDashboardState => {
   switch (action.type) {
+    case LOAD_DASHBOARDS: {
+      return {
+        ...state,
+        status: LOADING,
+      };
+    }
+    case LOAD_DASHBOARDS_SUCCESS: {
+      return {
+        entity: [...action.payload],
+        status: SUCCESS,
+      };
+    }
+    case LOAD_DASHBOARDS_FAIL: {
+      return {
+        ...state,
+        status: FAILURE,
+      };
+    }
     /** add dashboard */
     case ADD_DASHBOARD: {
       return {
         ...state,
-        status: LOADING
+        status: LOADING,
       };
     }
     case ADD_DASHBOARD_SUCCESS: {
       return {
-        entity: [
-          ...state.entity,
-          action.payload
-        ],
-        status: SUCCESS
+        entity: [...state.entity, action.payload],
+        status: SUCCESS,
       };
     }
     case ADD_DASHBOARD_FAIL: {
       return {
         ...state,
-        status: FAILURE
+        status: FAILURE,
       };
     }
     /** update dashboard */
     case UPDATE_DASHBOARD_SUCCESS: {
       return {
-        entity: [
-          ...state.entity,
-          action.payload
-        ],
-        status: SUCCESS
+        entity: [...state.entity, action.payload],
+        status: SUCCESS,
       };
     }
 
@@ -68,7 +87,7 @@ const dashoboradReducers = (
         entity: state.entity.filter(
           (item: any) => item.id !== action.payload.id
         ),
-        status: SUCCESS
+        status: SUCCESS,
       };
     }
     default: {
