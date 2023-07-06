@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { IFolderState } from '@/redux/reducers/FolderReducer';
 import FoldersList from '../components/FoldersList';
 import { loadDashboardsLogic } from '@/redux/actionCreators/entities/dashboard/logic';
-import { Dispatch } from 'react';
+import { Dispatch } from 'redux';
 type IOpenFunc = (id: number) => void
 interface Iprops {
     loadDashboards: IOpenFunc;

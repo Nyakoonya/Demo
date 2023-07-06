@@ -1,0 +1,24 @@
+.react-resizable-handle{
+    visibility: hidden;
+}
+  
+.react-grid-item:hover .react-resizable-handle{
+    visibility: visible;
+}
+
+.react-grid-item {
+  border: 1px solid #ececec;
+  padding: 10px;
+}
+
+.react-grid-item:hover .remove {
+  display: inline-block;
+}
+
+.react-resizable-handle {
+  visibility: hidden;
+}
+
+.react-grid-item:hover .react-resizable-handle {
+  visibility: visible;
+}

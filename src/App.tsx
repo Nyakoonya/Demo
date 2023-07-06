@@ -1,13 +1,14 @@
 // import React from "react";
 import { Routes, useLocation } from 'react-router-dom'
 import RouteTable from '@/router'
-import '@/App.css'
+import './App.css'
 import lessStyles from './app.less'
 import scssStyles from './app.scss'
 import stylStyles from './app.styl'
 import memberList from './test.json'
 import Class from '@/components/Class'
 import Layout from '@/views/Layout'
+
 console.log('memberList', memberList);
 console.log('RouteTable', RouteTable)
 function App() {

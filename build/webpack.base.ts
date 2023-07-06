@@ -47,14 +47,17 @@ const baseConfig: Configuration = {
         test: /.(ts|tsx)$/, // 匹配.ts, tsx文件
         use: "babel-loader",
       },
-      //   {
-      //     test: /.css$/, //匹配 css 文件
-      //     use: ["style-loader", "css-loader"],
-      //   },
+      // css 专门作为引入第三方样式，不走modules
       {
-        test: cssRegex, //匹配 css 文件
-        use: styleLoadersArray,
+        test: cssRegex,
+        // include: /node_modules/,
+        use: ["style-loader", "css-loader", "postcss-loader"],
       },
+      // {
+      //   test: cssRegex, //匹配 css 文件
+      //   exclude: /node_modules/,
+      //   use: styleLoadersArray,
+      // },
       {
         test: lessRegex,
         use: [

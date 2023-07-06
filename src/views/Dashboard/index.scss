@@ -1,0 +1,14 @@
+.dashboard-wrap {
+    box-sizing: border-box;
+    // margin-top: 5px;
+    min-height: 88vh;
+    display: flex;
+    justify-content: flex-start;
+    .left-menu {
+        flex: 1;
+        margin-right: 15px;
+    }
+    .right-layout {
+        flex: 4;
+    }
+}
