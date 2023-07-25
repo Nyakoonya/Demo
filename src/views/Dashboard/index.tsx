@@ -6,7 +6,9 @@ import { Card, Tabs } from "antd";
 import { InboxOutlined, LayoutOutlined } from '@ant-design/icons';
 import ComLib from '@/components/ComponentsLib';
 import StyleTab from '@/components/StyleTab';
+import { IReport } from "@/redux/reducers/ReportReducer";
 interface Iprops {
+    reports: IReport[]
 }
 function Dashboard(props: Iprops) {
     const tabsItems = [
@@ -57,7 +59,7 @@ function Dashboard(props: Iprops) {
 const mapStateToProps = (states: IRootState) => {
     console.log('states', states)
     return {
-        dashboards: states.dashboards.entity
+        reports: states.reports.entity
     }
 }
 export default connect(mapStateToProps)(Dashboard)

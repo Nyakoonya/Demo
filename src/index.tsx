@@ -6,7 +6,7 @@ import App from './App';
 
 import { HashRouter as Router } from 'react-router-dom';
 import routers from './router'
-import store from './redux/Store'
+import { store } from './redux/Store'
 const root = document.getElementById('root');
 
 console.log('NODE_ENV', process.env.NODE_ENV)

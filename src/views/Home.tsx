@@ -2,63 +2,48 @@ import { IRootState } from '@/redux/Store';
 import styles from './styles.scss'
 import { connect } from 'react-redux';
 import { IFolderState } from '@/redux/reducers/FolderReducer';
-import FoldersList from '../components/FoldersList';
+import List, { IList } from '../components/List';
 import { loadDashboardsLogic } from '@/redux/actionCreators/entities/dashboard/logic';
 import { Dispatch } from 'redux';
-type IOpenFunc = (id: number) => void
+import { addFolderLogic, loadFoldersLogic } from '@/redux/actionCreators/entities/folder/logic';
+import { useEffect } from 'react';
+import { loadFolders } from '@/redux/actionCreators/entities/folder/action';
+type IOpenFunc = (id: string) => void
 interface Iprops {
     loadDashboards: IOpenFunc;
-    folders: IFolderState,
-
+    folders: IList[],
+    [propName: string]: any
 }
 function Home(props: Iprops) {
     console.log('props.folders----->>>>', props.folders)
 
-    const testList = [
-        {
-            title: 'test',
-            id: 1,
-            img: ''
-        },
-        {
-            title: 'test',
-            id: 2,
-            img: ''
-        },
-        {
-            title: 'test',
-            id: 3,
-            img: ''
-        },
-        {
-            title: 'test',
-            id: 4,
-            img: ''
-        },
-        {
-            title: 'test',
-            id: 5,
-            img: ''
-        }
-    ]
+    useEffect(() => {
+        props.loadFolders()
+    }, [])
+    const onCreate = () => {
+        console.log('new');
+        props.addFolder()
+    }
     return (
         <>
             <div className={styles['create-box']}>
-                <div className={styles['create-btn']}>New Folder</div>
+                <div className={styles['create-btn']} onClick={onCreate}>New Folder</div>
             </div>
-            <FoldersList list={testList}  onOpen={props.loadDashboards}/>
+            <List list={props.folders}  onOpen={props.loadDashboards}/>
         </>
     );
 }
 const mapStateToProps = (states: IRootState) => {
     console.log('states', states)
     return {
-        folders: states.folders
+        folders: states.folders.entity
     }
 }
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
     return {
-        loadDashboards: (id: number) => dispatch(loadDashboardsLogic(id))
+        loadFolders: () => dispatch(loadFoldersLogic()),
+        addFolder: () => dispatch(addFolderLogic()),
+        loadDashboards: (id: string) => dispatch(loadDashboardsLogic(id))
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

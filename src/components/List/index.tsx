@@ -1,16 +1,17 @@
 import styles from './styles.scss'
 
-interface IFolderList {
+export interface IList {
     title: string,
-    id: number,
-    img: string
+    id: string,
+    img: string,
+    [propName: string]: any
 }
-type IOpenFunc = (id: number) => void
+type IOpenFunc = (id: string) => void
 interface Iprops {
-    list: IFolderList[],
+    list: IList[],
     onOpen: IOpenFunc
 }
-function FoldersList(props: Iprops) {
+function List(props: Iprops) {
     const { list, onOpen } = props
     return (
         <div className={styles['folders-wrap']}>
@@ -29,4 +30,4 @@ function FoldersList(props: Iprops) {
     )
 }
 
-export default FoldersList
+export default List

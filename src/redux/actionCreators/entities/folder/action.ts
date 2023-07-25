@@ -1,4 +1,9 @@
 import {
+  LOAD_FOLDER,
+  LOAD_FOLDER_FAIL,
+  LOAD_FOLDER_SUCCESS,
+} from "@/redux/actionTypes/entities/folder/loadFoldersTypes";
+import {
   ADD_FOLDER,
   ADD_FOLDER_FAIL,
   ADD_FOLDER_SUCCESS,
@@ -13,7 +18,18 @@ import {
 //   UPDATE_FOLDER_FAIL,
 //   UPDATE_FOLDER_SUCCESS,
 // } from "../../../actionTypes/entities/dashboard/updateFolderTypes";
-
+//** load folder */
+export const loadFolders = (): LOAD_FOLDER => ({
+  type: LOAD_FOLDER,
+});
+export const loadFoldersSuccess = (payload: any): LOAD_FOLDER_SUCCESS => ({
+  type: LOAD_FOLDER_SUCCESS,
+  payload,
+});
+export const loadFoldersFail = (err: any): LOAD_FOLDER_FAIL => ({
+  type: LOAD_FOLDER_FAIL,
+  err,
+});
 /** add folder */
 export const addFolder = (): ADD_FOLDER => ({
   type: ADD_FOLDER,
