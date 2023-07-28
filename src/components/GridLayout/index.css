@@ -9,6 +9,7 @@
 .react-grid-item {
   border: 1px solid #ececec;
   padding: 10px;
+  box-sizing: border-box;
 }
 
 .react-grid-item:hover .remove {

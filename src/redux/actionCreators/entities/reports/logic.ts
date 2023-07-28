@@ -9,12 +9,14 @@ import { IReport } from "@/redux/reducers/ReportReducer";
 // import * as shortid from "shortid";
 import { AddReportActionType } from "@/redux/actionTypes/entities/reports/addReportTypes";
 import { ThunkAction } from "redux-thunk";
+import { useLocation } from "react-router";
+import { bar } from '@/mock/barData'
 // const shortid = require('shortid');
 
 export const loadReportsLogic = (
   dashId: string
 ): ThunkAction<void, {}, {}, AnyAction> => {
-  return (dispatch: Dispatch<LoadReportsActionType>) => {
+  return (dispatch: Dispatch<LoadReportsActionType | RouterAction>) => {
     const state = getState();
     const { dashboards } = state;
     const curDash = dashboards.entity.find((dash) => dash.id === dashId);
@@ -22,24 +24,42 @@ export const loadReportsLogic = (
     // call api
 
     let reports: IReport[] = [];
-    reportIds.forEach((id) => {
+    /**reportIds.forEach((id, idx) => {
       console.log("id", id);
       if (id) {
-        fetchReport(id).then((res) => {
-          console.log("res", res);
-          const testRes = {
-            // id: shortid.generate(),
-            id:new Date().getTime().toString(),
-            name: "just test",
-            type: "none",
-            content: {},
-            dataSetting: {},
-          };
-          reports.push(testRes);
-        });
+        fetchReport(id)
+          .then((res) => {
+            console.log("res", res);
+
+            const testRes = {
+              // id: shortid.generate(),
+              id,
+              name: "just test",
+              type: "none",
+              content: {
+                layout: {
+                  x: idx*3.5 % 12,
+                  y: Infinity, // puts it at the bottom
+                  w: 3,
+                  h: 2.2,
+                  i: id
+                },
+              },
+              dataSetting: {},
+            };
+            reports.push(testRes);
+          })
+          .then(() => {
+            console.log("reports--->", reports);
+            dispatch(loadReportsSuccess(reports));
+          });
       }
-    });
+    });*/
+    reports.push(bar);
     dispatch(loadReportsSuccess(reports));
+    const location = window.location;
+    const path = location.hash.replace("#", "");
+    dispatch(push(`${path}/dashboard/${dashId}`));
   };
 };
 // fetch report data by report type
@@ -56,8 +76,6 @@ export const loadReportLogic = (payload: any) => {
     // });
     const data: any = {};
     dispatch(loadReportSuccess(data));
-    /** jump to the page and render */
-    dispatch(push(`/folders/${payload}`));
   };
 };
 

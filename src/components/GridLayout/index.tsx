@@ -1,6 +1,7 @@
 import { Layout, Layouts, Responsive, WidthProvider } from 'react-grid-layout'
 import { connect } from 'react-redux'
 import GridItem from './GridItem';
+import { useRef } from 'react';
 import './index.css'
 // import * as shortid from 'shortid';
 import { IRootState } from '@/redux/Store';
@@ -11,11 +12,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { loadReportsLogic } from '@/redux/actionCreators/entities/reports/logic';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 // const shortid = require('shortid');
-export interface IWidget {
-    layout: Layout,
-    widgetName: string,
-    id: string
-}
+
 interface IProps {
     reports: IReport[],
     addReport: (newReport: IReport) => void,
@@ -24,17 +21,18 @@ interface IProps {
 
 function GridLayout(props: IProps) {
     const { reports } = props;
-    const reportsContents = reports.map(item => item.content)
+    console.log('reports in dash', reports)
+    const gridRef = useRef<any>(null)
     // initial render of widgets in redux
-    const generateDom = (widgets: IWidget[]) => {
+    const generateDom = (widgets: IReport[]) => {
         return widgets.map((item, i) => (
-            <div key={item.layout.i} data-grid={item.layout} onClick={() => onSelected(item)}>
-                <GridItem widget={item.layout} />
+            <div key={item.content.layout.i} data-grid={item.content.layout} onClick={() => onSelected(item)}>
+                <GridItem gridItem={item} ref={gridRef} />
             </div>
         ))
     }
-    const onSelected = (item: IWidget) => {
-        console.log('selected', item.layout.i)
+    const onSelected = (item: IReport) => {
+        console.log('selected', item.content.layout.i)
     }
     // when add a widget
     const onAddWidget = () => {
@@ -42,32 +40,21 @@ function GridLayout(props: IProps) {
         // props.addReport(props.newReport)
         // regenerate?
     }
-    // data from redux = initial data
-    const testWidgets: IWidget[] = [
-        {
-            layout: {
-                x: 3 % 12,
-                y: Infinity, // puts it at the bottom
-                w: 1,
-                h: 2,
-                i: new Date().getTime().toString(),
-            },
-            widgetName: 'test',
-            // id: shortid.generate()
-            id: new Date().getTime().toString(),
-        }
-    ];
+
     const getLayouts: any = () => {
-        return reportsContents.map(item => item.layout)
+        return reports.map(item => item.content.layout)
     }
 
     // when remove a widget
-    const onRemoveWidget = (widget: IWidget) => {
+    const onRemoveWidget = (widget: IReport) => {
 
     }
     // when move a widget
-    const onLayoutChange = (layouts: any) => {
-        console.log('layouts--change layout', layouts)
+    const onLayoutChange = (layout: any, layouts: any) => {
+        console.log('layouts--change layout', layout)
+        console.log('layouts', layouts)
+        gridRef.current && gridRef.current.resize()
+
     }
 
     const onBreakpointChange = (newBreakPoint: string, newCols: number) => {
@@ -80,11 +67,15 @@ function GridLayout(props: IProps) {
         <div>
             <ResponsiveReactGridLayout
                 layouts={getLayouts()}
+                cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
+                rowHeight={100}
+                breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+                containerPadding={[15, 15]}
                 className='layout'
                 onLayoutChange={onLayoutChange}
                 onBreakpointChange={onBreakpointChange}
             >
-                {generateDom(reportsContents)}
+                {generateDom(reports)}
             </ResponsiveReactGridLayout></div>
 
     )
