@@ -6,6 +6,7 @@ const optionHandler = (option: any): EChartsOption => {
     return chartPaint(content, dataSetting)
 }
 
+
 export {
     optionHandler
 }
