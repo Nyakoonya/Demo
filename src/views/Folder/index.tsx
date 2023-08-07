@@ -11,6 +11,7 @@ import { addDashboardLogic, loadDashboardsLogic } from "@/redux/actionCreators/e
 import Tabs from "@/components/Tabs";
 import Datasource from "../Datasource";
 import { loadDatasourcesLogic } from "@/redux/actionCreators/entities/datasource/logic";
+import DSCreation from "../Datasource/DSCreation";
 
 type IOpenFunc = (id: string) => void
 interface Iprops {
@@ -30,6 +31,9 @@ function FoldersPage(props: Iprops) {
     console.log('create dash in folderId', params.folderId);
     addDashboard(folderId)
   }
+  const onAddDatasource = () => {
+    console.log('create datasource');
+  }
   const onChangeRender = (value: string) => {
     console.log('value--change render', value)
     switch (value) {
@@ -48,7 +52,7 @@ function FoldersPage(props: Iprops) {
       label: 'Folders',
       key: '1',
       children: <><div style={{ display: 'inline-block', textAlign: 'right', width: '100%', padding: '10px', boxSizing: 'border-box' }}>
-        <Button type="primary" onClick={onAddDashboard}>Create a dashboard</Button>
+        <Button type="primary" onClick={onAddDashboard} style={{ marginRight: '40px' }}>Create a dashboard</Button>
       </div>
 
         <List list={dashboards} onOpen={loadReports} /></>
@@ -56,7 +60,9 @@ function FoldersPage(props: Iprops) {
     {
       label: 'Datasources',
       key: '2',
-      children: <List list={props.datasources} onOpen={() => { }} />
+      children: <>
+        <DSCreation />
+        <List list={props.datasources} onOpen={() => { }} /></>
     }
   ]
   return (

@@ -1,0 +1,14 @@
+.ds-item {
+  width: 200px;
+  height: 150px;
+  margin-right: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  &:hover,
+  &:active {
+    border: 1px solid #eee;
+    border-radius: 5px;
+  }
+}
