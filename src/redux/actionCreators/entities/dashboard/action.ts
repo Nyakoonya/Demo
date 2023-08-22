@@ -38,9 +38,8 @@ export const loadDashboardFail = (err: any): LOAD_DASHBOARDS_FAIL => ({
 export const addDashboard = (): ADD_DASHBOARD => ({
   type: ADD_DASHBOARD,
 });
-export const addDashboardSuccess = (payload: any): ADD_DASHBOARD_SUCCESS => ({
-  type: ADD_DASHBOARD_SUCCESS,
-  payload,
+export const addDashboardSuccess = (): ADD_DASHBOARD_SUCCESS => ({
+  type: ADD_DASHBOARD_SUCCESS
 });
 export const addDashboardFail = (err: any): ADD_DASHBOARD_FAIL => ({
   type: ADD_DASHBOARD_FAIL,

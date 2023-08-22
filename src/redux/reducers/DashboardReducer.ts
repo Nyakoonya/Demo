@@ -64,7 +64,7 @@ const dashoboradReducers = (
     }
     case ADD_DASHBOARD_SUCCESS: {
       return {
-        entity: [...state.entity, action.payload],
+        entity: [...state.entity],
         status: SUCCESS,
       };
     }

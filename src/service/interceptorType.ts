@@ -1,5 +1,6 @@
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 
+
 export interface RequestInterceptors<T = AxiosResponse> {
   requestInterceptor?: (config: AxiosRequestConfig) => AxiosRequestConfig;
   requestInterceptorCatch?: (error: any) => any;

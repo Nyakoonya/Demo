@@ -12,6 +12,8 @@ import Tabs from "@/components/Tabs";
 import Datasource from "../Datasource";
 import { loadDatasourcesLogic } from "@/redux/actionCreators/entities/datasource/logic";
 import DSCreation from "../Datasource/DSCreation";
+import { useEffect } from "react";
+import useDidmount from "@/hooks/useDidmount";
 
 type IOpenFunc = (id: string) => void
 interface Iprops {
@@ -27,6 +29,9 @@ function FoldersPage(props: Iprops) {
   const { dashboards, loadReports, addDashboard } = props;
   const params = useParams();
   const { folderId = '' } = params;
+  useEffect(() => {
+    props.loadDashboards(folderId)
+  }, [])
   const onAddDashboard = () => {
     console.log('create dash in folderId', params.folderId);
     addDashboard(folderId)
@@ -55,14 +60,14 @@ function FoldersPage(props: Iprops) {
         <Button type="primary" onClick={onAddDashboard} style={{ marginRight: '40px' }}>Create a dashboard</Button>
       </div>
 
-        <List list={dashboards} onOpen={loadReports} /></>
+        <List list={dashboards} onOpen={loadReports} imgType={'dashImg'} /></>
     },
     {
       label: 'Datasources',
       key: '2',
       children: <>
         <DSCreation />
-        <List list={props.datasources} onOpen={() => { }} /></>
+        <List list={props.datasources} onOpen={() => { }} imgType={'dsImg'} /></>
     }
   ]
   return (
@@ -82,7 +87,7 @@ const mapStateToProps = (states: IRootState) => {
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
   return {
     loadReports: (id: string) => dispatch(loadReportsLogic(id)),
-    loadDashboards: (id: string) => dispatch(loadDashboardsLogic),
+    loadDashboards: (id: string) => dispatch(loadDashboardsLogic(id)),
     addDashboard: (id: string) => dispatch(addDashboardLogic(id)),
     loadDatasources: (id: string) => dispatch(loadDatasourcesLogic(id))
   }

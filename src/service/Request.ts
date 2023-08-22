@@ -7,12 +7,13 @@ class Request {
   interceptors?: RequestInterceptors;
 
   constructor(config: RequestConfig) {
+    console.log('config', config)
     this.instance = axios.create(config);
-    this.interceptors = config.interceptors;
+    this.interceptors = config.interceptors!;
 
     /** use interceptors */
     this.instance.interceptors.request.use(
-      //   this.interceptors?.requestInterceptor,
+      this.interceptors?.requestInterceptor,
       this.interceptors?.requestInterceptorCatch
     );
     this.instance.interceptors.response.use(
@@ -52,7 +53,7 @@ class Request {
       if (config.interceptors?.requestInterceptor) {
         config = config.interceptors.requestInterceptor(config);
       }
-
+      console.log('config------>>>>>>', config)
       this.instance
         .request<any, T>(config)
         .then((res) => {
@@ -77,6 +78,10 @@ class Request {
     return this.request<T>({ ...config, method: "POST" });
   }
 
+  put<T = any>(config: RequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: "PUT" });
+  }
+
   delete<T = any>(config: RequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: "DELETE" });
   }
@@ -85,4 +90,4 @@ class Request {
     return this.request<T>({ ...config, method: "PATCH" });
   }
 }
- export default Request;
+export default Request;

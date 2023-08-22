@@ -12,6 +12,7 @@ function ComLib(props: IProp): ReactNode {
   const dimensionRef = useRef<any>(null);
   const measureRef = useRef<any>(null);
   const [limit, setLimit] = useState(props.limit || 10);
+  const [dataSettingVisibility, setVisibility] = useState(false);
   const compTypes = Object.keys(components).map((k) => ({
     label: k,
     options: components[k].map(item => ({
@@ -22,6 +23,12 @@ function ComLib(props: IProp): ReactNode {
 
   const handleSelectCompType = (value: string) => {
     console.log('value', value)
+    if (value) {
+      setVisibility(true)
+    } else {
+      setVisibility(false)
+    }
+
   }
   const handleDone = () => {
     const dimensions = dimensionRef.current && dimensionRef.current.onPropsChange();
@@ -44,20 +51,19 @@ function ComLib(props: IProp): ReactNode {
             defaultValue={null}
             onChange={handleSelectCompType}
             options={compTypes}
+            allowClear={true}
           ></Select>
         </FormItem>
         <Divider>Data Settings</Divider>
-        <FormItem label="Dimensions">
+        {dataSettingVisibility && (<><FormItem label="Dimensions">
           <FeildSelection datasourceList={[]} selectedFields={[]} ref={dimensionRef} label='Add a dimension' />
-        </FormItem>
-        <FormItem label="Measures">
-          <FeildSelection datasourceList={[]} selectedFields={[]} ref={measureRef} label='Add a measure' />
-        </FormItem>
-        <FormItem label="Limit">
-          <InputNumber min={1} max={20000} defaultValue={limit} onChange={handleChangeLimit}></InputNumber>
-        </FormItem>
+        </FormItem><FormItem label="Measures">
+            <FeildSelection datasourceList={[]} selectedFields={[]} ref={measureRef} label='Add a measure' />
+          </FormItem><FormItem label="Limit">
+            <InputNumber min={1} max={20000} defaultValue={limit} onChange={handleChangeLimit}></InputNumber>
+          </FormItem>
+          <Button type="primary" onClick={handleDone}>Done</Button></>)}
       </Form>
-      <Button type="primary" onClick={handleDone}>Done</Button>
     </div>
   )
 }

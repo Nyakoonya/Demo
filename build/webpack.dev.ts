@@ -29,9 +29,9 @@ const devConfig: Configuration = merge(baseConfig, {
   - 开发中,我们每行代码不会写的太长,只需要定位到行就行,所以加上 cheap
   - 我们希望能够找到源代码的错误,而不是打包后的,所以需要加上 module
 */
-plugins: [
-  new ReactRefreshWebpackPlugin(), // 添加热更新插件
-],
+  plugins: [
+    new ReactRefreshWebpackPlugin(), // 添加热更新插件
+  ],
 });
 const devServer = new WebpackDevServer(
   {
@@ -46,6 +46,13 @@ const devServer = new WebpackDevServer(
       directory: path.join(__dirname, "../public"), // 托管静态资源public文件夹
     },
     headers: { "Access-Control-Allow-Origin": "*" },
+    proxy: {
+      '/api': {
+        target: 'http://localhost:80',
+        pathRewrite: { '^/api': '/api' },
+        changeOrigin: true
+      }
+    }
   },
   webpack(devConfig)
 );
