@@ -3,13 +3,22 @@ import { Button, message, Steps } from 'antd';
 import { useRef, useState } from 'react';
 import DSSelection from "./DSSelection";
 import DSConfiguration from "./DSConfiguration";
-
-function DSCreation() {
+import { connect } from "react-redux";
+import { ThunkDispatch } from "redux-thunk";
+import { addDatasourcelogic } from "@/redux/actionCreators/entities/datasource/logic";
+import { Action, Dispatch } from "redux";
+import { IRootState } from "@/redux/Store";
+interface IProp {
+  folderId: string,
+  addDatasource: (payload: { folderId: string, type: string, data: any }) => void
+}
+function DSCreation(props: IProp) {
   const [current, setCurrent] = useState(0);
   const [nextValiable, setNextValiable] = useState(false);
   const [curType, setCurType] = useState('');
   const [curCategory, setCurCategory] = useState('');
   const modalRef = useRef<any>(null);
+  const DSconfRef = useRef<any>(null);
   const onSelect = (type: string, category: string) => {
     if (type && category) {
       setNextValiable(true);
@@ -31,14 +40,31 @@ function DSCreation() {
     },
     {
       title: 'Second',
-      content: <DSConfiguration type={curType} category={curCategory} />
+      content: <DSConfiguration type={curType} category={curCategory} ref={DSconfRef} />
     }
   ]
   const items = steps.map(item => ({ key: item.title, title: item.title }))
   const onDone = () => {
-    message.success('Processing complete!')
-    modalRef.current.close();
-    setCurrent(0);
+    console.log('done----->>>>')
+    if (['excel', 'csv'].includes(curType)) {
+      const formData = DSconfRef.current && DSconfRef.current.onAddDatasource(curType);
+      formData.append('folderId', props.folderId);
+      formData.append('type', curType);
+      console.log('formData id', formData.get('folderId'))
+      console.log('formData file', formData.get('file'))
+      //  redux logic
+      Promise.resolve().then(() => {
+        props.addDatasource({
+          folderId: props.folderId,
+          type: curType,
+          data: formData
+        })
+      }).then(() => {
+        message.success('Processing complete!')
+        modalRef.current.close();
+        setCurrent(0);
+      })
+    }
   }
   return (
     <Modal title="Datasource Creation" btnLabel="Create a datasource" width={800} footer={null} ref={modalRef}>
@@ -64,5 +90,14 @@ function DSCreation() {
     </Modal>
   )
 }
+const mapStateToProps = (state: IRootState) => {
+  return {
 
-export default DSCreation;
+  }
+}
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, Action>) => {
+  return {
+    addDatasource: (payload: { folderId: string, type: string, data: any }) => dispatch(addDatasourcelogic(payload))
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(DSCreation);

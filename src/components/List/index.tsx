@@ -1,6 +1,7 @@
 import styles from './styles.scss'
 import folderImg from '@/assets/images/folder.png';
-import dashImg from '@/assets/images/dash.png'
+import dashImg from '@/assets/images/dash.png';
+import dsImg from '@/assets/images/datsource.png'
 export interface IList {
   title: string,
   id: string,
@@ -18,7 +19,7 @@ function List(props: Iprops) {
   const img: any = {
     folderImg: folderImg,
     dashImg: dashImg,
-    dsImg: ''
+    dsImg: dsImg
   }
   return (
     <div className={styles['folders-wrap']}>

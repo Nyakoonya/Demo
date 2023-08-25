@@ -4,7 +4,7 @@ import { Upload as AntdUpload, Button } from 'antd'
 import { UploadOutlined } from '@ant-design/icons';
 
 interface RefInstance {
-  upload: () => void
+  data: any
 }
 interface IProp {
 
@@ -12,29 +12,24 @@ interface IProp {
 function Upload(props: IProp, ref: React.Ref<RefInstance>) {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [uploading, setUploading] = useState(false);
-  useImperativeHandle(ref, () => {
-    return {
-      upload() {
-        handleUpload()
-      }
-    }
-  })
-  const handleUpload = () => {
-    const formData = new FormData();
-    fileList.forEach((file) => {
-      formData.append('files[]', file as RcFile);
-    });
-    setUploading(true);
-    // api
-  }
+  const [formData, setFormData] = useState<any>(null);
+  useImperativeHandle(ref, () => ({
+    data: () => formData,
+    uploading: () => uploading
+  }))
 
   const uploadProps: UploadProps = {
     onRemove: (file) => {
       setFileList([]);
     },
     beforeUpload: (file) => {
+      console.log('file', file)
       setFileList([file]);
-
+      const formData = new FormData();
+      formData.append('file', file as RcFile);
+      console.log('formData----right', formData.get('file'))
+      setFormData(formData);
+      setUploading(true);
       return false;
     },
     fileList,
