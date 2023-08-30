@@ -1,7 +1,7 @@
 const dataHandler = (content: any, dataSetting: any) => {
   console.log("content", content);
   console.log("dataSetting", dataSetting);
-  const { dimensions, measures, data } = dataSetting;
+  const { dimensions, measures, data = [] } = dataSetting;
   // 1 dim 1 measure
   let xAxis;
   const xData = dimensions[0] && data.map((d: any[]) => d[dimensions[0].index]);

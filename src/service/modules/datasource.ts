@@ -14,3 +14,10 @@ export const fetchDatasourceData = (id: string, page: number, row: number): Prom
   url: '/api/datasource/data',
   params: { id, page, row }
 })
+
+export const fetchColumnsUnderFolder = (id: string): Promise<any> => request.get({
+  url: '/api/datasource/columnsUnderFolder',
+  params: {
+    folderId: id
+  }
+})

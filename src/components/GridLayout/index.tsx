@@ -36,6 +36,7 @@ function GridLayout(props: IProps) {
   }
   const onSelected = (item: IReport) => {
     console.log('selected', item.content.layout.i)
+    // redux change active report
   }
   // when add a widget
   const onAddWidget = () => {
@@ -87,10 +88,10 @@ const mapStateToProps = (states: IRootState) => {
     reports: states.reports.entity,
   }
 }
-const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, Action>) => {
+const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
     addReport: (report: IReport) => addReportSuccess(report),
-    loadReports: (id: string) => dispatch(loadReportsLogic(id))
+    loadReports: (id: string, isPush: boolean) => dispatch(loadReportsLogic(id, isPush))
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(GridLayout);

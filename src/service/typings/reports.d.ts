@@ -1,6 +1,8 @@
 interface IReportRes {
-    report: any
+  code: number,
+  msg: string,
+  data: any
 }
 interface IReportDatasRes {
-    data: any
+  data: any
 }

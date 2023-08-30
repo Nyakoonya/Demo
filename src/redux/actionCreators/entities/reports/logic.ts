@@ -1,86 +1,110 @@
-import { LoadReportActionType } from "@/redux/actionTypes/entities/reports/loadReportTypes";
-import { push, RouterAction } from "react-router-redux";
-import { Action, ActionCreator, AnyAction, Dispatch } from "redux";
-import { getState } from "../../../Store";
-import { loadReportsSuccess, loadReportSuccess } from "./action";
-import { LoadReportsActionType } from "@/redux/actionTypes/entities/reports/loadReportsTypes";
-import { fetchReport } from "@/service/modules/reports";
+import { push } from "react-router-redux";
+import { IRootState } from "../../../Store";
+import { addReportFail, addReportSuccess, loadReportsSuccess, loadReportSuccess, updateReportSuccess } from "./action";
+import { fetchReportData, fetchReports, saveReportsUnderDash } from "@/service/modules/reports";
 import { IReport } from "@/redux/reducers/ReportReducer";
-// import * as shortid from "shortid";
-import { AddReportActionType } from "@/redux/actionTypes/entities/reports/addReportTypes";
-import { ThunkAction } from "redux-thunk";
-import { useLocation } from "react-router";
-import { bar } from '@/mock/barData'
+import { generateContent } from "@/utils/generateContent";
+import { MyThunkDispatch, MyThunkResult } from "@/redux/typing";
 // const shortid = require('shortid');
-
+// type MyThunkResult<R> = ThunkAction<R, IRootState, undefined, Action>;
+// type MyThunkDispatch = ThunkDispatch<IRootState, undefined, Action>;
 export const loadReportsLogic = (
-  dashId: string
-): ThunkAction<void, {}, {}, AnyAction> => {
-  return (dispatch: Dispatch<LoadReportsActionType | RouterAction>) => {
+  dashId: string, isPush: boolean
+) => {
+  return (dispatch: MyThunkDispatch, getState: () => IRootState) => {
     const state = getState();
-    const { dashboards } = state;
-    const curDash = dashboards.entity.find((dash) => dash.id === dashId);
-    const reportIds: string[] = curDash.reports || [];
-    // call api
-
-    let reports: IReport[] = [];
-    /**reportIds.forEach((id, idx) => {
-      console.log("id", id);
-      if (id) {
-        fetchReport(id)
-          .then((res) => {
-            console.log("res", res);
-
-            const testRes = {
-              // id: shortid.generate(),
-              id,
-              name: "just test",
-              type: "none",
-              content: {
-                layout: {
-                  x: idx*3.5 % 12,
-                  y: Infinity, // puts it at the bottom
-                  w: 3,
-                  h: 2.2,
-                  i: id
-                },
-              },
-              dataSetting: {},
-            };
-            reports.push(testRes);
-          })
-          .then(() => {
-            console.log("reports--->", reports);
-            dispatch(loadReportsSuccess(reports));
-          });
+    fetchReports(dashId).then(res => {
+      console.log('res---->>>>load reports', res)
+      let data = res.data;
+      try {
+        data = data.map((item: IReport) => ({
+          ...item,
+          content: {
+            ...item.content,
+            layout: {
+              ...item.content.layout,
+              y: item.content.layout.y == null ? Infinity : item.content.layout.y
+            }
+          }
+        }))
+      } catch (error) {
+        console.log('error load reports', error)
       }
-    });*/
-    reports.push(bar);
-    dispatch(loadReportsSuccess(reports));
-    const location = window.location;
-    const path = location.hash.replace("#", "");
-    dispatch(push(`${path}/dashboard/${dashId}`));
+      dispatch(loadReportsSuccess(data));
+      return data;
+    }).then((data) => {
+      console.log('data----->>>> load reports', data)
+      data.forEach((item: any) => {
+        dispatch(loadReportLogic(item)).then(() => {
+          if (isPush) {
+            const location = window.location;
+            const path = location.hash.replace("#", "");
+            dispatch(push(`${path}/dashboard/${dashId}`));
+          }
+        })
+      })
+    })
+
   };
 };
 // fetch report data by report type
-export const loadReportLogic = (payload: any) => {
-  return (dispatch: Dispatch<LoadReportActionType | RouterAction>) => {
-    console.log("payload reportId ", payload);
-    /**fetch report data by id */
-    // fetchReportData(payload).then((res) => {
-    //   console.log("res", res);
-    // dispatch(loadReportSuccess(res.data))
-    // }).catch(err => {
-    // console.log('err', err)
-    // dispatch(loadReportFail(err))
-    // });
-    const data: any = {};
-    dispatch(loadReportSuccess(data));
+export const loadReportLogic = (payload: {
+  dashId: string,
+  category: string,
+  type: string,
+  dataSetting: any,
+  limit: number,
+  id?: string,
+  title?: string,
+  content?: any
+},
+): MyThunkResult<Promise<boolean>> => {
+  console.log('------------');
+  return (dispatch, getState) => {
+    console.log("payload ", payload);
+    console.log('state', getState());
+    const state = getState();
+    // content
+    if (!payload.id) {
+      const newItem = generateContent(state.reports.entity.length);
+      payload.id = newItem.id;
+      payload.title = newItem.title;
+      payload.content = newItem.content
+      fetchReportData(
+        payload
+      ).then((res) => {
+        console.log("done res", res);
+        dispatch(addReportSuccess({
+          ...payload,
+          id: payload.id!,
+          title: payload.title!,
+          content: payload.content!,
+          dataSetting: {
+            ...res.data
+          }
+        }))
+      })
+        .catch(err => {
+          console.log('err', err)
+          dispatch(addReportFail(err))
+        });
+    } else {
+      fetchReportData(
+        payload
+      ).then((res) => {
+        console.log("done res", res);
+        dispatch(updateReportSuccess({
+          ...payload,
+          id: payload.id!,
+          title: payload.title!,
+          content: payload.content!,
+          dataSetting: {
+            ...res.data
+          }
+        }))
+      })
+    }
+
+    return Promise.resolve(true)
   };
 };
-
-// export const addReportLogic = (payload: IReport) => {
-//   return (dispatch: Dispatch<AddReportActionType>) => {
-
-//   }
-// }

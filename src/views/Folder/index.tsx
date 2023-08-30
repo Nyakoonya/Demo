@@ -21,7 +21,7 @@ interface Iprops {
   datasources: any[],
   isLoading: boolean,
   isDone: boolean,
-  loadReports: IOpenFunc,
+  loadReports: (id: string, isPush: boolean) => void,
   addDashboard: (id: string) => void,
   loadDashboards: (id: string) => void,
   loadDatasources: (id: string) => void,
@@ -86,7 +86,7 @@ function FoldersPage(props: Iprops) {
         <Button type="primary" onClick={onAddDashboard} style={{ marginRight: '40px' }}>Create a dashboard</Button>
       </div>
 
-        <List list={dashboards} onOpen={loadReports} imgType={'dashImg'} /></>
+        <List list={dashboards} onOpen={(id) => loadReports(id, true)} imgType={'dashImg'} /></>
     },
     {
       label: 'Datasources',
@@ -117,9 +117,9 @@ const mapStateToProps = (states: IRootState) => {
     getDatasourceData: (id: string | null) => datasources.entity.find(d => d.id === id) && datasources.entity.find(d => d.id === id)!.data,
   }
 }
-const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, AnyAction>) => {
+const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
-    loadReports: (id: string) => dispatch(loadReportsLogic(id)),
+    loadReports: (id: string, isPush: boolean) => dispatch(loadReportsLogic(id, isPush)),
     loadDashboards: (id: string) => dispatch(loadDashboardsLogic(id)),
     addDashboard: (id: string) => dispatch(addDashboardLogic(id)),
     loadDatasources: (id: string) => dispatch(loadDatasourcesLogic(id)),

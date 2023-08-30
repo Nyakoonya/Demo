@@ -1,7 +1,7 @@
 import { Action, AnyAction, Dispatch } from "redux"
 import { addDatasource, addDatasourceSuccess, loadDatasourceData, loadDatasourceDataSuccess, loadDatasources, loadDatasourcesSuccess } from "./action"
 import { createDatasourceByExcel, fetchDatasourceData, fetchDatasourceList } from "@/service/modules/datasource";
-import { ThunkAction, ThunkDispatch } from "redux-thunk";
+import { ThunkDispatch } from "redux-thunk";
 import { getState } from "@/redux/Store";
 import { isDone, isLoading } from "../constant";
 export const loadDatasourcesLogic = (folderId: string) => {

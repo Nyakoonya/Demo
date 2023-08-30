@@ -1,12 +1,23 @@
+import { IReport } from "@/redux/reducers/ReportReducer";
 import request from "../index";
-export const fetchReport = (params: any): Promise<IReportRes> =>
+export const fetchReports = (id: string): Promise<IReportRes> =>
   request.get({
-    url: "/report",
-    params,
+    url: "/api/reports",
+    params: {
+      dashId: id
+    },
   });
 
 export const fetchReportData = (params: any): Promise<IReportDatasRes> =>
   request.post({
-    url: "/report/data",
-    params,
+    url: "/api/reports/data",
+    data: params,
   });
+
+export const saveReportsUnderDash = (reports: IReport[], dashId: string): Promise<IReportRes> => request.post({
+  url: '/api/reports',
+  data: {
+    dashId,
+    reports
+  }
+})

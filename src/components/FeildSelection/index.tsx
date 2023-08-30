@@ -12,9 +12,10 @@ export interface IDimension {
   [propName: string]: any
 }
 interface IProp {
-  datasourceList: IDimension[],
+  list: IDimension[],
   selectedFields: IDimension[],
-  label: string
+  label: string,
+  limit: number,
 }
 interface IRefInstance {
   onPropsChange: () => any[]
@@ -28,13 +29,14 @@ function FeildSelection(props: IProp, ref: React.Ref<IRefInstance>) {
   useImperativeHandle(ref, () => {
     return {
       onPropsChange() {
-        const result = fieldItems.map(f => (props.datasourceList.find(d => d.id === f.value)));
+        console.log('fieldItems', fieldItems)
+        const result = fieldItems.map(f => (props.list.find(d => `${d.dataSourceId}.${d.columnName}` === f.value)));
         console.log('result', result);
         return result;
       }
     }
   })
-  const options = props.datasourceList.map(d => ({ label: `${d.datasourceName}.${d.fieldName}`, value: d.id }))
+  const options = props.list.map(d => ({ label: `${d.title}.${d.columnName}`, value: `${d.dataSourceId}.${d.columnName}` }))
 
   const [selectedFields, setSelectedField] = useState(props.selectedFields);
   const [fieldItems, setFieldItems] = useState<IFeildItem[]>([]);
@@ -44,7 +46,7 @@ function FeildSelection(props: IProp, ref: React.Ref<IRefInstance>) {
       return {
         id,
         content: <Item key={id} options={options} id={id} onRemove={handleRemoveItem} onChange={handleChangeFeildSelection} feildItem={s} />,
-        value: s.id
+        value: `${s.datasourceId}.${s.fieldName}`
       }
     })
     setFieldItems(initialFieldItems);
@@ -67,25 +69,28 @@ function FeildSelection(props: IProp, ref: React.Ref<IRefInstance>) {
     // }
   }, [])
   const handleChangeFeildSelection = useCallback((id: string, value: string) => {
-    const newFieldItems = fieldItems.map(f => {
-      if (f.id === id) {
-        f.value = value
-      }
-      return f
+    setFieldItems((fieldItems) => {
+      console.log('fieldItems====>>>>', fieldItems)
+      console.log('value===>>>', value)
+      return fieldItems.map(f => {
+        if (f.id === id) {
+          f.value = value
+        }
+        return f
+      })
     })
-    setFieldItems(newFieldItems)
   }, [])
   return (
     <div>
       {fieldItems.map(f => f.content)}
-      <Button
+      {props.limit > fieldItems.length && <Button
         type="dashed"
         onClick={handleAddItem}
         style={{ width: '60%', marginTop: '20px' }}
         icon={<PlusOutlined />}
       >
         {props.label}
-      </Button>
+      </Button>}
     </div>
 
   )

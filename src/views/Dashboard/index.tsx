@@ -7,16 +7,38 @@ import { InboxOutlined, LayoutOutlined } from '@ant-design/icons';
 import ComLib from '@/components/ComponentsLib';
 import StyleTab from '@/components/StyleTab';
 import { IReport } from "@/redux/reducers/ReportReducer";
+import { ThunkDispatch } from "redux-thunk";
+import { Action, Dispatch } from "redux";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { fetchColumnsUnderFolder } from "@/service/modules/datasource";
+import { loadReportsLogic } from "@/redux/actionCreators/entities/reports/logic";
 interface Iprops {
-  reports: IReport[]
+  reports: IReport[],
+  loadReports: (dashId: string, isPush: boolean) => void
 }
 function Dashboard(props: Iprops) {
+  const [fieldList, setFieldList] = useState([]);
+  const params = useParams();
+  const { folderId = '', dashId = '' } = params;
+  useEffect(() => {
+    fetchColumnsUnderFolder(folderId).then(res => {
+      const { data } = res;
+      console.log('data---datasource columns', data)
+      if (data) {
+        setFieldList(data)
+      }
+    })
+  }, [])
+  useEffect(() => {
+    props.loadReports(dashId, false)
+  }, [])
   const tabsItems = [
     {
       id: '1',
       title: 'ComponentsLibrary',
       icon: InboxOutlined,
-      children: <ComLib limit={10} datasourceList={[]}></ComLib>
+      children: <ComLib limit={10} datasourceFieldsList={fieldList}></ComLib>
     },
     {
       id: '2',
@@ -62,4 +84,9 @@ const mapStateToProps = (states: IRootState) => {
     reports: states.reports.entity
   }
 }
-export default connect(mapStateToProps)(Dashboard)
+const mapDispatchToProps = (dispatch: Dispatch<any>) => {
+  return {
+    loadReports: (dashId: string, isPush: boolean) => dispatch(loadReportsLogic(dashId, isPush))
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
