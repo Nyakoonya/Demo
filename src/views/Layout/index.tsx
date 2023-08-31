@@ -32,18 +32,6 @@ function Layout(props: Iprops) {
       }
     }))
 
-    // try {
-    //   reports = reports.map(item => {
-    //     return {
-    //       ...item,
-    //       content: {
-    //         layout: JSON.stringify(item.content.layout)
-    //       }
-    //     }
-    //   })
-    // } catch (error) {
-    //   console.log('error', error)
-    // }
     saveReportsUnderDash(reports, routerParams.dashId!).then(res => {
       console.log('res save', res)
       const { code, msg } = res;
@@ -86,7 +74,6 @@ function Layout(props: Iprops) {
   )
 }
 const mapStateToProps = (state: IRootState) => {
-  console.log('state----->>>>save', state)
   return {
     reports: state.reports.entity
   }

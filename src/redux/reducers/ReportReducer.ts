@@ -11,6 +11,7 @@ import {
   LOAD_REPORTS_SUCCESS,
   LoadReportsActionType,
 } from "../actionTypes/entities/reports/loadReportsTypes";
+import { REMOVE_REPORT, REMOVE_REPORT_FAIL, REMOVE_REPORT_SUCCESS, RemoveReportActionType } from "../actionTypes/entities/reports/removeReportTypes";
 import { UPDATE_REPORT, UPDATE_REPORT_FAIL, UPDATE_REPORT_SUCCESS, UpdateReportActionType } from "../actionTypes/entities/reports/updateReportTypes";
 
 export interface IReportsState {
@@ -24,6 +25,7 @@ export interface IReport {
   type: string;
   content: any;
   dataSetting: any;
+  limit: number
 }
 const initialState = {
   entity: [],
@@ -31,7 +33,7 @@ const initialState = {
 };
 const reportReducers = (
   state: IReportsState = initialState,
-  action: LoadReportsActionType | AddReportActionType | UpdateReportActionType
+  action: LoadReportsActionType | AddReportActionType | UpdateReportActionType | RemoveReportActionType
 ): IReportsState => {
   switch (action.type) {
     case LOAD_REPORTS: {
@@ -83,6 +85,24 @@ const reportReducers = (
       };
     }
     case UPDATE_REPORT_FAIL: {
+      return {
+        ...state,
+        status: FAILURE
+      }
+    }
+    case REMOVE_REPORT: {
+      return {
+        ...state,
+        status: LOADING,
+      };
+    }
+    case REMOVE_REPORT_SUCCESS: {
+      return {
+        entity: [...(state.entity.filter(item => item.id !== action.payload))],
+        status: SUCCESS,
+      };
+    }
+    case REMOVE_REPORT_FAIL: {
       return {
         ...state,
         status: FAILURE

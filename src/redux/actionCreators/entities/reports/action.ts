@@ -13,6 +13,7 @@ import {
   LOAD_REPORT_FAIL,
   LOAD_REPORT_SUCCESS,
 } from "@/redux/actionTypes/entities/reports/loadReportTypes";
+import { REMOVE_REPORT, REMOVE_REPORT_SUCCESS, REMOVE_REPORT_FAIL } from "@/redux/actionTypes/entities/reports/removeReportTypes";
 import { UPDATE_REPORT, UPDATE_REPORT_FAIL, UPDATE_REPORT_SUCCESS } from "@/redux/actionTypes/entities/reports/updateReportTypes";
 import { IReport } from "@/redux/reducers/ReportReducer";
 
@@ -66,3 +67,14 @@ export const updateReportFail = (err: any) => ({
 // save reports
 
 // delete report
+export const removeReport = (): REMOVE_REPORT => ({
+  type: REMOVE_REPORT,
+});
+export const removeReportSuccess = (id: string): REMOVE_REPORT_SUCCESS => ({
+  type: REMOVE_REPORT_SUCCESS,
+  payload: id,
+});
+export const removeReportFail = (err: any): REMOVE_REPORT_FAIL => ({
+  type: REMOVE_REPORT_FAIL,
+  err,
+});

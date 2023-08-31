@@ -7,15 +7,19 @@ import './index.css'
 import { IRootState } from '@/redux/Store';
 import { IReport, IReportsState } from '@/redux/reducers/ReportReducer';
 import { Action, AnyAction, Dispatch } from 'redux';
-import { addReportSuccess } from '@/redux/actionCreators/entities/reports/action';
+import { addReportSuccess, removeReportSuccess } from '@/redux/actionCreators/entities/reports/action';
 import { ThunkDispatch } from 'redux-thunk';
 import { loadReportsLogic } from '@/redux/actionCreators/entities/reports/logic';
+import { changeActiveReport } from '@/redux/actionCreators/entities/constant';
+import { CloseOutlined } from '@ant-design/icons';
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 // const shortid = require('shortid');
 
 interface IProps {
   reports: IReport[],
   addReport: (newReport: IReport) => void,
+  changeActiveReport: (id: string | null) => void
+  removeReport: (id: string) => void
   // newReport: IReport
 }
 
@@ -29,27 +33,24 @@ function GridLayout(props: IProps) {
   const generateDom = (widgets: IReport[]) => {
     console.log('----->>>generte------->>>')
     return widgets.map((item, i) => (
-      <div key={item.content.layout.i} data-grid={item.content.layout} onClick={() => onSelected(item)}>
+      <div key={item.content.layout.i} data-grid={item.content.layout} onClick={(e) => onSelected(e, item)}>
+        <span className='remove' onClick={() => onRemoveItem(item.id)}><CloseOutlined /></span>
         <GridItem gridItem={item} ref={gridRef} />
       </div>
     ))
   }
-  const onSelected = (item: IReport) => {
-    console.log('selected', item.content.layout.i)
+  const onSelected = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: IReport) => {
+    console.log('selected', item.id)
+    e.stopPropagation();
     // redux change active report
+    props.changeActiveReport(item.id);
   }
-  // when add a widget
-  const onAddWidget = () => {
-    // add new widget into redux 
-    // props.addReport(props.newReport)
-    // regenerate?
-  }
-
   // when remove a widget
-  const onRemoveWidget = (widget: IReport) => {
-
+  const onRemoveItem = (id: string) => {
+    props.removeReport(id);
+    props.changeActiveReport(null)
   }
-  // when move a widget
+
   const onLayoutChange = (layout: any, layouts: any) => {
     console.log('layouts--change layout', layout)
     // change layout of report, through redux(updateReportLogic)
@@ -83,7 +84,7 @@ function GridLayout(props: IProps) {
   )
 }
 const mapStateToProps = (states: IRootState) => {
-  console.log('states', states);
+  console.log('states active', states);
   return {
     reports: states.reports.entity,
   }
@@ -91,7 +92,9 @@ const mapStateToProps = (states: IRootState) => {
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
     addReport: (report: IReport) => addReportSuccess(report),
-    loadReports: (id: string, isPush: boolean) => dispatch(loadReportsLogic(id, isPush))
+    loadReports: (id: string, isPush: boolean) => dispatch(loadReportsLogic(id, isPush)),
+    changeActiveReport: (id: string | null) => dispatch(changeActiveReport(id)),
+    removeReport: (id: string) => dispatch(removeReportSuccess(id))
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(GridLayout);

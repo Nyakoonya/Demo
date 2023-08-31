@@ -8,13 +8,15 @@ import { IFolderState } from "./reducers/FolderReducer";
 import { IReportsState } from "./reducers/ReportReducer";
 import { IDatasourceState } from "./reducers/DatasourceReducer";
 import { ILoadingState } from "./reducers/LoadingReducer";
+import { IConstantState } from "./reducers/ConstantReducer";
 
 export interface IRootState {
   dashboards: IDashboardState;
   folders: IFolderState;
   reports: IReportsState;
   datasources: IDatasourceState;
-  loading: ILoadingState
+  loading: ILoadingState,
+  constant: IConstantState
 }
 
 let createHistory = require("history").createHashHistory;

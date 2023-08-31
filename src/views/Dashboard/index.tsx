@@ -13,9 +13,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { fetchColumnsUnderFolder } from "@/service/modules/datasource";
 import { loadReportsLogic } from "@/redux/actionCreators/entities/reports/logic";
+import { changeActiveReport } from "@/redux/actionCreators/entities/constant";
 interface Iprops {
   reports: IReport[],
-  loadReports: (dashId: string, isPush: boolean) => void
+  loadReports: (dashId: string, isPush: boolean) => void,
+  changeActiveReport: (id: string | null) => void
 }
 function Dashboard(props: Iprops) {
   const [fieldList, setFieldList] = useState([]);
@@ -47,6 +49,11 @@ function Dashboard(props: Iprops) {
       children: <StyleTab></StyleTab>
     }
   ];
+  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    console.log('click blank----->>>')
+    e.stopPropagation();
+    props.changeActiveReport(null);
+  }
   return (
     <div className={styles["dashboard-wrap"]}>
       <div className={styles["left-menu"]}>
@@ -69,7 +76,7 @@ function Dashboard(props: Iprops) {
         </Card>
       </div>
       <div className={styles["right-layout"]}>
-        <Card style={{ width: '100%', height: '100%' }}>
+        <Card style={{ width: '100%', height: '100%' }} onClick={(e) => handleClick(e)}>
           <GridLayout></GridLayout>
         </Card>
 
@@ -86,7 +93,8 @@ const mapStateToProps = (states: IRootState) => {
 }
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
-    loadReports: (dashId: string, isPush: boolean) => dispatch(loadReportsLogic(dashId, isPush))
+    loadReports: (dashId: string, isPush: boolean) => dispatch(loadReportsLogic(dashId, isPush)),
+    changeActiveReport: (id: string | null) => dispatch(changeActiveReport(id))
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

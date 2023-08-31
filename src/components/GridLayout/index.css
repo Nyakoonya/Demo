@@ -1,9 +1,9 @@
-.react-resizable-handle{
-    visibility: hidden;
+.react-resizable-handle {
+  visibility: hidden;
 }
-  
-.react-grid-item:hover .react-resizable-handle{
-    visibility: visible;
+
+.react-grid-item:hover .react-resizable-handle {
+  visibility: visible;
 }
 
 .react-grid-item {
@@ -22,4 +22,13 @@
 
 .react-grid-item:hover .react-resizable-handle {
   visibility: visible;
+}
+.remove {
+  position: absolute;
+  right: 8px;
+  top: 7px;
+  cursor: pointer;
+  z-index: 999;
+  display: none;
+  font-size: 12px;
 }
