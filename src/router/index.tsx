@@ -3,6 +3,7 @@ import homeRoutes from "./home";
 import { Suspense, lazy } from "react";
 import { RouteObject, useRoutes } from "react-router-dom";
 import AuthRouter from './AuthRouter'
+import { Spin } from 'antd';
 
 const Layout = lazy(() => import('@/views/Layout'));
 
@@ -17,7 +18,9 @@ const syncRouter = (table: SyncRoute.Routes[]): RouteObject[] => {
       mRouteTable.push({
         path: route.path,
         element: (
-          <Suspense fallback={<div>waiting...</div>}>
+          <Suspense fallback={<Spin tip="Loading" size="large">
+            <div style={{ marginTop: '50px' }}></div>
+          </Spin>}>
             <AuthRouter>
               <route.element />
             </AuthRouter>
@@ -30,7 +33,9 @@ const syncRouter = (table: SyncRoute.Routes[]): RouteObject[] => {
         path: route.path,
         element: (
 
-          <Suspense fallback={<div>waiting...</div>}>
+          <Suspense fallback={<Spin tip="Loading" size="large">
+            <div style={{ marginTop: '50px' }}></div>
+          </Spin>}>
             <AuthRouter>
               <Layout>
                 <route.element />

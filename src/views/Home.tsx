@@ -29,7 +29,7 @@ function Home(props: Iprops) {
       <div className={styles['create-box']}>
         <div className={styles['create-btn']} onClick={onCreate}>New Folder</div>
       </div>
-      <List list={props.folders} onOpen={props.loadDashboards} imgType={'folderImg'} />
+      <List list={props.folders} onOpen={props.loadDashboards} type={'folder'} />
     </>
   );
 }

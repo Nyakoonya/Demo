@@ -17,6 +17,7 @@
       justify-content: center;
       background-color: #ececec57;
       border-radius: 20px 20px 0 0;
+      cursor: pointer;
       img {
         height: 100%;
       }
@@ -29,6 +30,12 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+    }
+    .folder-operation {
+      cursor: pointer;
+      &:hover {
+        color: #1677ff;
+      }
     }
   }
 }

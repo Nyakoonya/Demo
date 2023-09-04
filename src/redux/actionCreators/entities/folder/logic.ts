@@ -1,7 +1,8 @@
-import { addFolder, addFolderSuccess, loadFolders, loadFoldersSuccess } from "./action";
+import { addFolder, addFolderSuccess, loadFolders, loadFoldersSuccess, updateFolder, updateFolderFail, updateFolderSuccess } from "./action";
 import { Dispatch } from "redux";
 import { LoadFoldersActionType } from "@/redux/actionTypes/entities/folder/loadFoldersTypes";
-import { createFolder, fetchFolders } from '@/service/modules/folders';
+import { createFolder, fetchFolders, updateFolderAPI } from '@/service/modules/folders';
+import { MyThunkDispatch } from "@/redux/typing";
 
 export const addFolderLogic = () => {
   return (dispatch: Dispatch<any>) => {
@@ -23,7 +24,27 @@ export const loadFoldersLogic = () => {
       console.log('res load folders', res)
       const { data: { list } } = res;
       dispatch(loadFoldersSuccess(list))
+    }).catch(err => {
+      console.log('err', err)
     })
 
   };
 };
+
+export const updateFolderLogic = (payload: any) => {
+  return (dispatch: MyThunkDispatch) => {
+    dispatch(updateFolder())
+    updateFolderAPI(payload).then(res => {
+      dispatch(updateFolderSuccess(payload))
+    }).catch(err => {
+      console.log('err', err);
+      dispatch(updateFolderFail(err))
+    })
+  }
+}
+
+export const delteFolderLogic = () => {
+  return (dispatch: MyThunkDispatch) => {
+
+  }
+}

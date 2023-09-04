@@ -9,6 +9,7 @@ import { IReportsState } from "./reducers/ReportReducer";
 import { IDatasourceState } from "./reducers/DatasourceReducer";
 import { ILoadingState } from "./reducers/LoadingReducer";
 import { IConstantState } from "./reducers/ConstantReducer";
+import { IUser } from "./actionTypes/entities/user/userType";
 
 export interface IRootState {
   dashboards: IDashboardState;
@@ -16,7 +17,8 @@ export interface IRootState {
   reports: IReportsState;
   datasources: IDatasourceState;
   loading: ILoadingState,
-  constant: IConstantState
+  constant: IConstantState,
+  user: IUser
 }
 
 let createHistory = require("history").createHashHistory;
@@ -28,4 +30,4 @@ const store = createStore(
   composeWithDevTools(applyMiddleware(thunk, routerWare))
 );
 const getState = () => store.getState();
-export { store, getState };
+export { store, getState, history };

@@ -16,7 +16,7 @@ interface Configuration extends WebpackConfiguration {
   devServer?: WebpackDevServerConfiguration;
 }
 
-const host = "127.0.0.1";
+const host = "0.0.0.0";
 const port = "3000";
 
 // 合并公共配置,并添加开发环境配置

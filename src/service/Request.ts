@@ -1,7 +1,8 @@
 import axios from "axios";
-import type { AxiosInstance } from "axios";
+import type { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 import type { RequestConfig, RequestInterceptors } from "./interceptorType";
-
+import { store, history } from "@/redux/Store";
+import { logoutSuccess } from "@/redux/actionCreators/entities/user/action";
 class Request {
   instance: AxiosInstance;
   interceptors?: RequestInterceptors;
@@ -24,6 +25,10 @@ class Request {
     // add common interceptors applied to all instances
     this.instance.interceptors.request.use(
       (config) => {
+        const token = localStorage.getItem('token')
+        if (token) {
+          config.headers!["authorization"] = token;
+        }
         return config;
       },
       (err) => {
@@ -32,12 +37,29 @@ class Request {
     );
 
     this.instance.interceptors.response.use(
-      (res) => {
-        const data = res.data;
-        // handle with the response 
-        return data
+      (res: any) => {
+        const data = res.data
+        console.log('res interceptor', res)
+        // }
+        if (data) {
+          return data;
+        } else {
+          console.log('res interceptor', res)
+          const { data } = res.response
+          // handle with the response 
+          if (data.code === 401 || data.code === 403) {
+            Promise.resolve().then(() => {
+              store.dispatch(logoutSuccess())
+              localStorage.removeItem('token');
+              localStorage.removeItem('userData');
+              history.push('/login')
+            })
+            throw new Error(data.msg)
+          }
+        }
       },
       (err) => {
+        console.log('err interceptor', err)
         // handle with the differrent errors
         if (err.response.status === 404) {
           console.log("not found");
@@ -53,7 +75,6 @@ class Request {
       if (config.interceptors?.requestInterceptor) {
         config = config.interceptors.requestInterceptor(config);
       }
-      console.log('config------>>>>>>', config)
       this.instance
         .request<any, T>(config)
         .then((res) => {
@@ -65,6 +86,7 @@ class Request {
           resolve(res);
         })
         .catch((err) => {
+          console.log('err inter', err)
           reject(err);
           return err;
         });

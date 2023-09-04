@@ -8,7 +8,7 @@ export const createFolder = (): Promise<any> => request.post({
   url: "/api/folders/create"
 })
 
-export const updateFolder = (payload: IFolderUpdate): Promise<any> => request.put({
+export const updateFolderAPI = (payload: IFolderUpdate): Promise<any> => request.put({
   url: '/api/folders',
   data: payload
 })

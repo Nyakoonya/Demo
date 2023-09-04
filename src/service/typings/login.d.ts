@@ -1,5 +1,6 @@
 declare interface ILoginRes {
-  token: string;
   code: number;
+  msg: string,
+  data: any
 }
 // export { ILoginRes };

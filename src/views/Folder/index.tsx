@@ -86,14 +86,14 @@ function FoldersPage(props: Iprops) {
         <Button type="primary" onClick={onAddDashboard} style={{ marginRight: '40px' }}>Create a dashboard</Button>
       </div>
 
-        <List list={dashboards} onOpen={(id) => loadReports(id, true)} imgType={'dashImg'} /></>
+        <List list={dashboards} onOpen={(id) => loadReports(id, true)} type={'dash'} /></>
     },
     {
       label: 'Datasources',
       key: '2',
       children: <>
         <DSCreation folderId={folderId} />
-        <List list={props.datasources} onOpen={(id) => handleShowData(id)} imgType={'dsImg'} />
+        <List list={props.datasources} onOpen={(id) => handleShowData(id)} type={'ds'} />
         {show && <DSData data={data} ref={DsdataRef} id={curDsId} changeVisibility={changeVisibility} />}
       </>
     }
