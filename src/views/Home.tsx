@@ -8,6 +8,7 @@ import { Dispatch } from 'redux';
 import { addFolderLogic, loadFoldersLogic } from '@/redux/actionCreators/entities/folder/logic';
 import { useEffect } from 'react';
 import { loadFolders } from '@/redux/actionCreators/entities/folder/action';
+import { Button } from 'antd';
 type IOpenFunc = (id: string) => void
 interface Iprops {
   loadDashboards: IOpenFunc;
@@ -27,7 +28,8 @@ function Home(props: Iprops) {
   return (
     <>
       <div className={styles['create-box']}>
-        <div className={styles['create-btn']} onClick={onCreate}>New Folder</div>
+        {/* <div className={styles['create-btn']} onClick={onCreate}>New Folder</div> */}
+        <Button type="primary" onClick={onCreate} style={{ marginRight: '40px' }}>Create a folder</Button>
       </div>
       <List list={props.folders} onOpen={props.loadDashboards} type={'folder'} />
     </>

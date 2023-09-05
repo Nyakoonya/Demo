@@ -1,23 +1,25 @@
 .create-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .create-btn {
-        box-sizing: border-box;
-        margin-top: 30px;
-        width: 400px;
-        height: 80px;
-        line-height: 80px;
-        text-align: center;
-        color: #fff;
-        background-color: #4095E5;
-        font-size: 24px;
-        border-radius: 10px;
-        cursor: pointer;
-        &:hover {
-            background-color: #fff;
-            color: #4095E5;
-            border: 1px solid #4095E5;
-        }
-    }
+  display: inline-block;
+  text-align: right;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  // .create-btn {
+  //   box-sizing: border-box;
+  //   margin-top: 30px;
+  //   width: 400px;
+  //   height: 80px;
+  //   line-height: 80px;
+  //   text-align: center;
+  //   color: #fff;
+  //   background-color: #3778ff;
+  //   font-size: 24px;
+  //   border-radius: 10px;
+  //   cursor: pointer;
+  //   &:hover {
+  //     background-color: #fff;
+  //     color: #4095e5;
+  //     border: 1px solid #3778ff;
+  //   }
+  // }
 }

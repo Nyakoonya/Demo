@@ -1,9 +1,9 @@
 import { SyncRoute } from './namespace';
 import homeRoutes from "./home";
 import { Suspense, lazy } from "react";
-import { RouteObject, useRoutes } from "react-router-dom";
+import { Link, Navigate, RouteObject, useRoutes } from "react-router-dom";
 import AuthRouter from './AuthRouter'
-import { Spin } from 'antd';
+import { Breadcrumb, Spin } from 'antd';
 
 const Layout = lazy(() => import('@/views/Layout'));
 
@@ -13,6 +13,7 @@ const RouteTable: SyncRoute.Routes[] = [
 
 const syncRouter = (table: SyncRoute.Routes[]): RouteObject[] => {
   let mRouteTable: RouteObject[] = [];
+  let breadCrumbsText = '';
   table.forEach(route => {
     if (route.isAuth) {
       mRouteTable.push({
@@ -29,6 +30,11 @@ const syncRouter = (table: SyncRoute.Routes[]): RouteObject[] => {
         children: route.children && syncRouter(route.children)
       })
     } else {
+      if (breadCrumbsText !== '') {
+        breadCrumbsText = `/${route.title}`
+      } else {
+        breadCrumbsText = route.title
+      }
       mRouteTable.push({
         path: route.path,
         element: (

@@ -53,8 +53,12 @@ class Request {
               localStorage.removeItem('token');
               localStorage.removeItem('userData');
               history.push('/login')
+            }).then(() => {
+              throw new Error(data.msg)
+            }).then(() => {
+              location.reload()
             })
-            throw new Error(data.msg)
+
           }
         }
       },

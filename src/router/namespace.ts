@@ -3,6 +3,7 @@ export namespace SyncRoute {
     path: string;
     element: React.LazyExoticComponent<any>;
     children?: Routes[];
-    isAuth?: boolean
+    isAuth?: boolean,
+    title: string
   };
 }

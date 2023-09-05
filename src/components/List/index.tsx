@@ -86,7 +86,7 @@ function List(props: Iprops) {
   )
 }
 const mapStateToProps = (state: IRootState) => {
-
+  return {}
 }
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
