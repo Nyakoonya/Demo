@@ -3,6 +3,7 @@ import type { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 import type { RequestConfig, RequestInterceptors } from "./interceptorType";
 import { store, history } from "@/redux/Store";
 import { logoutSuccess } from "@/redux/actionCreators/entities/user/action";
+import { AuthError } from "@/utils/common";
 class Request {
   instance: AxiosInstance;
   interceptors?: RequestInterceptors;
@@ -52,11 +53,8 @@ class Request {
               store.dispatch(logoutSuccess())
               localStorage.removeItem('token');
               localStorage.removeItem('userData');
-              history.push('/login')
             }).then(() => {
-              throw new Error(data.msg)
-            }).then(() => {
-              location.reload()
+              throw new AuthError(data)
             })
 
           }

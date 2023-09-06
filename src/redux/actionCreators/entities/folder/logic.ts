@@ -3,6 +3,7 @@ import { Dispatch } from "redux";
 import { LoadFoldersActionType } from "@/redux/actionTypes/entities/folder/loadFoldersTypes";
 import { createFolder, fetchFolders, updateFolderAPI } from '@/service/modules/folders';
 import { MyThunkDispatch } from "@/redux/typing";
+import { push } from "react-router-redux";
 
 export const addFolderLogic = () => {
   return (dispatch: Dispatch<any>) => {
@@ -17,7 +18,7 @@ export const addFolderLogic = () => {
 };
 
 export const loadFoldersLogic = () => {
-  return (dispatch: Dispatch<LoadFoldersActionType>) => {
+  return (dispatch: Dispatch<any>) => {
     dispatch(loadFolders());
     // fetch folders data
     fetchFolders().then(res => {
@@ -26,6 +27,9 @@ export const loadFoldersLogic = () => {
       dispatch(loadFoldersSuccess(list))
     }).catch(err => {
       console.log('err', err)
+      if (err.status == 401 || err.status == 403) {
+        dispatch(push('/login'))
+      }
     })
 
   };
