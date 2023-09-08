@@ -35,14 +35,14 @@ export const loadReportsLogic = (
     }).then((data) => {
       console.log('data----->>>> load reports', data)
       data.forEach((item: any) => {
-        dispatch(loadReportLogic(item)).then(() => {
-          if (isPush) {
-            const location = window.location;
-            const path = location.hash.replace("#", "");
-            dispatch(push(`${path}/dashboard/${dashId}`));
-          }
-        })
+        dispatch(loadReportLogic(item))
       })
+    }).then(() => {
+      if (isPush) {
+        const location = window.location;
+        const path = location.hash.replace("#", "");
+        dispatch(push(`${path}/dashboard/${dashId}`));
+      }
     })
 
   };
