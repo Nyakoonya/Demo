@@ -55,6 +55,11 @@ class Request {
               localStorage.removeItem('userData');
             }).then(() => {
               throw new AuthError(data)
+            }).catch(err => {
+              console.log('err request catch', err)
+              if (err.status == 401 || err.status == 403) {
+                history.push('/login')
+              }
             })
 
           }
