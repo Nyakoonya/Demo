@@ -14,7 +14,7 @@ import {
   LOAD_REPORT_SUCCESS,
 } from "@/redux/actionTypes/entities/reports/loadReportTypes";
 import { REMOVE_REPORT, REMOVE_REPORT_SUCCESS, REMOVE_REPORT_FAIL } from "@/redux/actionTypes/entities/reports/removeReportTypes";
-import { UPDATE_REPORT, UPDATE_REPORT_FAIL, UPDATE_REPORT_SUCCESS } from "@/redux/actionTypes/entities/reports/updateReportTypes";
+import { UPDATE_REPORT, UPDATE_REPORT_FAIL, UPDATE_REPORT_SUCCESS, UPDATE_REPORTS, UPDATE_REPORTS_FAIL, UPDATE_REPORTS_SUCCESS } from "@/redux/actionTypes/entities/reports/updateReportTypes";
 import { IReport } from "@/redux/reducers/ReportReducer";
 
 export const loadReport = (): LOAD_REPORT => ({
@@ -64,6 +64,17 @@ export const updateReportFail = (err: any) => ({
   type: UPDATE_REPORT_FAIL,
   err,
 });
+export const updateReports = (): UPDATE_REPORTS => ({
+  type: UPDATE_REPORTS,
+});
+export const updateReportsSuccess = (payload: IReport[]) => ({
+  type: UPDATE_REPORTS_SUCCESS,
+  payload,
+});
+export const updateReportsFail = (err: any) => ({
+  type: UPDATE_REPORTS_FAIL,
+  err,
+})
 // save reports
 
 // delete report

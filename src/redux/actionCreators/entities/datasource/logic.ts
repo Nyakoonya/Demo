@@ -12,6 +12,8 @@ export const loadDatasourcesLogic = (folderId: string) => {
       console.log('res datasource list---->>>', res)
       const { data: { list } } = res;
       dispatch(loadDatasourcesSuccess(list))
+    }).catch(error => {
+      console.log('error', error)
     })
   }
 }
@@ -24,6 +26,8 @@ export const addDatasourcelogic = (payload: { folderId: string, type: string, da
       if (type === 'excel') {
         createDatasourceByExcel(data).then(() => {
           dispatch(loadDatasourcesLogic(folderId))
+        }).catch(error => {
+          console.log('error', error)
         })
       }
     })
@@ -48,6 +52,8 @@ export const loadDatasourceDataLogic = (id: string | null, page: number = 1, row
       }
       dispatch(loadDatasourceDataSuccess(payload))
       return Promise.resolve(payload)
+    }).catch(err => {
+      console.log('err', err)
     })
     // } else {
     //   return Promise.resolve();

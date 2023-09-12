@@ -18,6 +18,8 @@ export const addDashboardLogic = (folderId: string) => {
     createDashboard({ folderId }).then(() => {
       dispatch(addDashboardSuccess());
       dispatch(loadDashboardsLogic(folderId))
+    }).catch(err => {
+      console.log('err', err)
     })
   };
 };
@@ -31,7 +33,7 @@ export const loadDashboardsLogic = (payload: any) => {
     }).then(() => {
       /** jump to the page and render */
       dispatch(push(`/folders/${payload}`));
-    })
+    }).catch(err => console.log('err', err))
   };
 };
 

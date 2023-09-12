@@ -6,12 +6,12 @@ export const generateContent = (length: number) => {
     x: (length * 4.5) % 12,
     y: Infinity, // puts it at the bottom
     w: 4,
-    h: 3,
+    h: 4,
     i: id,
   }
   return {
     id,
-    title: `report(${length + 1})`,
+    title: `Report(${length + 1})`,
     content: {
       layout,
       options: {}

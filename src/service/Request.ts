@@ -4,6 +4,7 @@ import type { RequestConfig, RequestInterceptors } from "./interceptorType";
 import { store, history } from "@/redux/Store";
 import { logoutSuccess } from "@/redux/actionCreators/entities/user/action";
 import { AuthError } from "@/utils/common";
+import { message } from "@/components/Common/EscapeAntd";
 class Request {
   instance: AxiosInstance;
   interceptors?: RequestInterceptors;
@@ -41,28 +42,27 @@ class Request {
       (res: any) => {
         const data = res.data
         console.log('res interceptor', res)
-        // }
-        if (data) {
-          return data;
+        if (res.data && res.data.code === 0) {
+          return data
         } else {
-          console.log('res interceptor', res)
-          const { data } = res.response
+          const { data } = res.response;
           // handle with the response 
-          if (data.code === 401 || data.code === 403) {
-            Promise.resolve().then(() => {
-              store.dispatch(logoutSuccess())
-              localStorage.removeItem('token');
-              localStorage.removeItem('userData');
-            }).then(() => {
-              throw new AuthError(data)
-            }).catch(err => {
-              console.log('err request catch', err)
-              if (err.status == 401 || err.status == 403) {
+          Promise.resolve().then(() => {
+            throw new AuthError(data)
+          }).catch(err => {
+            if (err.status == 401 || err.status == 403) {
+              Promise.resolve().then(() => {
+                store.dispatch(logoutSuccess())
+                localStorage.removeItem('token');
+                localStorage.removeItem('userData');
+              }).then(() => {
+                message.error(err.message)
+              }).then(() => {
                 history.push('/login')
-              }
-            })
+              })
+            }
+          })
 
-          }
         }
       },
       (err) => {

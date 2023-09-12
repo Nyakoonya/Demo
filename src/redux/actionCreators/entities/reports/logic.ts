@@ -43,6 +43,8 @@ export const loadReportsLogic = (
         const path = location.hash.replace("#", "");
         dispatch(push(`${path}/dashboard/${dashId}`));
       }
+    }).catch(err => {
+      console.log('err', err)
     })
 
   };
@@ -64,6 +66,7 @@ export const loadReportLogic = (payload: {
     console.log("payload ", payload);
     console.log('state', getState());
     const state = getState();
+    const activeReport = state.constant.activeReport;
     // content
     if (!payload.id) {
       const newItem = generateContent(state.reports.entity.length);
@@ -88,11 +91,12 @@ export const loadReportLogic = (payload: {
           console.log('err', err)
           dispatch(addReportFail(err))
         });
+
     } else {
       fetchReportData(
         payload
       ).then((res) => {
-        console.log("done res", res);
+        console.log("done res active", res);
         dispatch(updateReportSuccess({
           ...payload,
           id: payload.id!,

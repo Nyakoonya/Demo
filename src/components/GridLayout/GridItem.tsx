@@ -24,6 +24,7 @@ function GridItem(props: IProps, ref: React.Ref<RefInstance>): ReactElement {
   console.log('gridItem---->grid item', gridItem)
   return (
     <div className={styles["item-wrap"]}>
+      <div className={styles['item-title']}>{gridItem.title}</div>
       {props.gridItem.category === 'echarts' ? (<Echarts id={`echarts-${gridItem.id}`} item={gridItem} ref={echartsRef} />) : null}
       {props.gridItem.category === 'table' ? (<div>table</div>) : null}
       {!props.gridItem.category && <div>unknown</div>}

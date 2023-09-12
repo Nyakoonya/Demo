@@ -12,7 +12,7 @@ import {
   LoadReportsActionType,
 } from "../actionTypes/entities/reports/loadReportsTypes";
 import { REMOVE_REPORT, REMOVE_REPORT_FAIL, REMOVE_REPORT_SUCCESS, RemoveReportActionType } from "../actionTypes/entities/reports/removeReportTypes";
-import { UPDATE_REPORT, UPDATE_REPORT_FAIL, UPDATE_REPORT_SUCCESS, UpdateReportActionType } from "../actionTypes/entities/reports/updateReportTypes";
+import { UPDATE_REPORT, UPDATE_REPORTS, UPDATE_REPORTS_FAIL, UPDATE_REPORTS_SUCCESS, UPDATE_REPORT_FAIL, UPDATE_REPORT_SUCCESS, UpdateReportActionType } from "../actionTypes/entities/reports/updateReportTypes";
 
 export interface IReportsState {
   entity: IReport[];
@@ -85,6 +85,24 @@ const reportReducers = (
       };
     }
     case UPDATE_REPORT_FAIL: {
+      return {
+        ...state,
+        status: FAILURE
+      }
+    }
+    case UPDATE_REPORTS: {
+      return {
+        ...state,
+        status: LOADING,
+      };
+    }
+    case UPDATE_REPORTS_SUCCESS: {
+      return {
+        entity: action.payload,
+        status: SUCCESS,
+      };
+    }
+    case UPDATE_REPORTS_FAIL: {
       return {
         ...state,
         status: FAILURE

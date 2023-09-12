@@ -23,15 +23,13 @@ export const loadFoldersLogic = () => {
     // fetch folders data
     fetchFolders().then(res => {
       console.log('res load folders', res)
-      const { data: { list } } = res;
-      dispatch(loadFoldersSuccess(list))
+      if (res && res.data) {
+        const { data: { list } } = res;
+        dispatch(loadFoldersSuccess(list))
+      }
     }).catch(err => {
       console.log('err', err)
-      if (err.status == 401 || err.status == 403) {
-        dispatch(push('/login'))
-      }
     })
-
   };
 };
 

@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { Button, Divider, Form, InputNumber, Select } from 'antd';
+import { Button, Divider, Form, Input, InputNumber, Select } from 'antd';
 import { components, others } from '../../lib/index';
 import FeildSelection, { IDimension } from "../FeildSelection";
 import { IRootState } from "@/redux/Store";
@@ -24,20 +24,18 @@ function ComLib(props: IProp): ReactNode {
   const [limit, setLimit] = useState(props.limit || 10);
   const [dimLimit, setDimLimit] = useState(Infinity);
   const [meaLimit, setMeaLimit] = useState(Infinity);
-  const [dataSettingVisibility, setVisibility] = useState(false);
   const [curChartType, setChartType] = useState('');
-  const [curChartCategory, setChartCategory] = useState('')
-  const activeReport = useSelector((state: IRootState) => state.constant.activeReport)
+  const [curChartCategory, setChartCategory] = useState('');
+  const activeReport = useSelector((state: IRootState) => state.constant.activeReport);
+  const [defaultReportTitle, setReportTitle] = useState(props.activeReport ? props.activeReport.title : `Report(${props.reports.length + 1})`);
   const [defaultCompType, setDefaultComType] = useState(props.activeReport && props.activeReport.type);
   const [defaultDimensions, setDefaultDimenisons] = useState(props.activeReport ? props.activeReport.dataSetting.dimensions : []);
   const [defaultMeasures, setDefaultMeasures] = useState(props.activeReport ? props.activeReport.dataSetting.measures : []);
 
   useEffect(() => {
     const activeReportItem = activeReport ? props.reports.find(r => r.id === activeReport) : null
-
-    if (activeReportItem) {
-      setLimit(activeReportItem.limit)
-    }
+    setLimit(activeReportItem ? activeReportItem.limit : 10)
+    setReportTitle(activeReportItem ? activeReportItem.title : `Report(${props.reports.length + 1})`)
     setDefaultComType(activeReportItem ? `${activeReportItem.category}-${activeReportItem.type}` : '')
     handleSelectCompType(activeReportItem ? `${activeReportItem.category}-${activeReportItem.type}` : '')
     setDefaultDimenisons(activeReportItem ? activeReportItem.dataSetting.dimensions : []);
@@ -67,7 +65,11 @@ function ComLib(props: IProp): ReactNode {
       setMeaLimit(obj.measureLimit)
     } else {
     }
-
+  }
+  const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target && e.target.value) {
+      setReportTitle(e.target.value)
+    }
   }
   const handleDone = () => {
     const dimensions = dimensionRef.current && dimensionRef.current.onPropsChange();
@@ -85,13 +87,30 @@ function ComLib(props: IProp): ReactNode {
       })),
     }
     // redux logic
-    props.loadReport({
-      dashId,
-      category: curChartCategory,
-      type: curChartType,
-      dataSetting,
-      limit
-    })
+    const target = props.reports.find(r => r.id === activeReport)
+    console.log('target', target)
+    if (target) {
+      props.loadReport({
+        id: target.id,
+        title: defaultReportTitle,
+        dashId,
+        content: target.content,
+        category: curChartCategory,
+        type: curChartType,
+        dataSetting,
+        limit
+      })
+    } else {
+      props.loadReport({
+        dashId,
+        title: defaultReportTitle,
+        category: curChartCategory,
+        type: curChartType,
+        dataSetting,
+        limit
+      })
+    }
+
   }
   const handleChangeLimit = (value: number | null) => {
     if (value)
@@ -110,11 +129,17 @@ function ComLib(props: IProp): ReactNode {
           ></Select>
         </FormItem>
         <Divider>Data Settings</Divider>
-        {defaultCompType && (<><FormItem label="Dimensions">
-          <FeildSelection list={props.datasourceFieldsList} selectedFields={defaultDimensions} ref={dimensionRef} label='Add a dimension' limit={dimLimit} />
-        </FormItem><FormItem label="Measures">
+        {defaultCompType && (<>
+          <FormItem label="Report Title">
+            <Input value={defaultReportTitle} onChange={handleChangeTitle}></Input>
+          </FormItem>
+          <FormItem label="Dimensions">
+            <FeildSelection list={props.datasourceFieldsList} selectedFields={defaultDimensions} ref={dimensionRef} label='Add a dimension' limit={dimLimit} />
+          </FormItem>
+          <FormItem label="Measures">
             <FeildSelection list={props.datasourceFieldsList} selectedFields={defaultMeasures} ref={measureRef} label='Add a measure' limit={meaLimit} />
-          </FormItem><FormItem label="Limit">
+          </FormItem>
+          <FormItem label="Limit">
             <InputNumber min={1} max={20000} defaultValue={limit} onChange={handleChangeLimit}></InputNumber>
           </FormItem>
           <Button type="primary" onClick={handleDone}>Done</Button></>)}
