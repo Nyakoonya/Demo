@@ -40,10 +40,15 @@ class Request {
 
     this.instance.interceptors.response.use(
       (res: any) => {
-        const data = res.data
         console.log('res interceptor', res)
-        if (res.data && res.data.code === 0) {
-          return data
+        if (res.data) {
+          const data = res.data
+          if (data.code === 0) {
+            return data
+          } else {
+            message.error(data.msg);
+            return data;
+          }
         } else {
           const { data } = res.response;
           // handle with the response 

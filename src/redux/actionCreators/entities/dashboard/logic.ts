@@ -3,12 +3,17 @@ import {
   addDashboardSuccess,
   loadDashboards,
   loadDashboardSuccess,
+  updateDashboard,
+  updateDashboardFail,
+  updateDashboardSuccess,
 } from "./action";
 import { Dispatch } from "redux";
 import { AddDashboardActionType } from "../../../actionTypes/entities/dashboard/addDashoboardTypes";
 import { LoadDashboardsActionType } from "@/redux/actionTypes/entities/dashboard/loadDashboardsTypes";
 import { createDashboard, fetchDashboards } from "@/service/modules/dashboard";
 import { push, RouterAction } from 'react-router-redux';
+import { MyThunkDispatch } from "@/redux/typing";
+import { updateDashboard as updateDashboardAPI } from "@/service/modules/dashboard";
 
 /* add dashboard */
 export const addDashboardLogic = (folderId: string) => {
@@ -36,4 +41,19 @@ export const loadDashboardsLogic = (payload: any) => {
     }).catch(err => console.log('err', err))
   };
 };
+
+export const updateDashLogic = (payload: any) => {
+  return (dispatch: MyThunkDispatch) => {
+    dispatch(updateDashboard());
+    updateDashboardAPI(payload).then(() => {
+      dispatch(updateDashboardSuccess(payload));
+    }).then(() => {
+      dispatch(loadDashboardsLogic(payload.folderId));
+      return Promise.resolve();
+    })
+      .catch((err: any) => {
+        dispatch(updateDashboardFail(err))
+      })
+  }
+}
 

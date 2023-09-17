@@ -1,0 +1,20 @@
+export const UPDATE_DATASOURCE = 'UPDATE_DATASOURCE';
+export const UPDATE_DATASOURCE_SUCCESS = 'UPDATE_DATASOURCE_SUCCESS';
+export const UPDATE_DATASOURCE_FAIL = 'UPDATE_DATASOURCE_FAIL';
+
+export interface UPDATE_DATASOURCE {
+  type: typeof UPDATE_DATASOURCE
+}
+
+export interface UPDATE_DATASOURCE_SUCCESS {
+  type: typeof UPDATE_DATASOURCE_SUCCESS,
+  payload: any
+}
+
+export interface UPDATE_DATASOURCE_FAIL {
+  type: typeof UPDATE_DATASOURCE_FAIL,
+  err?: any
+}
+
+
+export type UpdateDatasourcectionType = UPDATE_DATASOURCE | UPDATE_DATASOURCE_SUCCESS | UPDATE_DATASOURCE_FAIL;

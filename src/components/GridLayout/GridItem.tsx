@@ -3,6 +3,8 @@ import styles from './GridItem.scss'
 import { IReport } from "@/redux/reducers/ReportReducer";
 import Echarts from '../Echarts';
 import { ReactElement, forwardRef, useImperativeHandle, useRef } from 'react';
+import { isEmpty, get as _get } from 'lodash';
+import ErrorBoundry from '../ErrorBoundry';
 interface IProps {
   gridItem: IReport
 }
@@ -22,14 +24,22 @@ function GridItem(props: IProps, ref: React.Ref<RefInstance>): ReactElement {
     echartsRef.current && echartsRef.current.resize()
   }
   console.log('gridItem---->grid item', gridItem)
-  return (
-    <div className={styles["item-wrap"]}>
-      <div className={styles['item-title']}>{gridItem.title}</div>
-      {props.gridItem.category === 'echarts' ? (<Echarts id={`echarts-${gridItem.id}`} item={gridItem} ref={echartsRef} />) : null}
-      {props.gridItem.category === 'table' ? (<div>table</div>) : null}
-      {!props.gridItem.category && <div>unknown</div>}
-    </div>
-  )
+  const reportData = _get(gridItem, ['dataSetting', 'data']);
+  console.log('reportData', reportData)
+  if (!isEmpty(reportData)) {
+    return (
+      <div className={styles["item-wrap"]}>
+        <div className={styles['item-title']}>{gridItem.title}</div>
+        {props.gridItem.category === 'echarts' ? (<Echarts id={`echarts-${gridItem.id}`} item={gridItem} ref={echartsRef} />) : null}
+        {props.gridItem.category === 'table' ? (<div>table</div>) : null}
+        {!props.gridItem.category && <div>unknown</div>}
+      </div>
+    )
+  } else {
+    return (
+      <ErrorBoundry />
+    )
+  }
 }
 
 export default forwardRef(GridItem);

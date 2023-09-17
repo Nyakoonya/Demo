@@ -101,7 +101,6 @@ function FoldersPage(props: Iprops) {
   return (
     <div>
       <Tabs items={tabItems} activeKey='1' onChangeTab={(value) => onChangeRender(value)}></Tabs>
-      <p>{`${show}`}</p>
     </div>
 
   )

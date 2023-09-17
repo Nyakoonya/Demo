@@ -1,11 +1,12 @@
 import { Action, AnyAction, Dispatch } from "redux"
-import { addDatasource, addDatasourceSuccess, loadDatasourceData, loadDatasourceDataSuccess, loadDatasources, loadDatasourcesSuccess } from "./action"
-import { createDatasourceByExcel, fetchDatasourceData, fetchDatasourceList } from "@/service/modules/datasource";
+import { addDatasource, addDatasourceSuccess, loadDatasourceData, loadDatasourceDataSuccess, loadDatasources, loadDatasourcesSuccess, updateDatasource, updateDatasourceFail, updateDatasourceSuccess } from "./action"
+import { createDatasourceByExcel, fetchDatasourceData, fetchDatasourceList, updateDatasourceInfo } from "@/service/modules/datasource";
 import { ThunkDispatch } from "redux-thunk";
 import { getState } from "@/redux/Store";
 import { isDone, isLoading } from "../constant";
+import { MyThunkDispatch } from "@/redux/typing";
 export const loadDatasourcesLogic = (folderId: string) => {
-  return (dispatch: ThunkDispatch<{}, {}, Action>) => {
+  return (dispatch: MyThunkDispatch) => {
     dispatch(loadDatasources());
     /* fetch datasource data */
     fetchDatasourceList(folderId).then(res => {
@@ -19,7 +20,7 @@ export const loadDatasourcesLogic = (folderId: string) => {
 }
 
 export const addDatasourcelogic = (payload: { folderId: string, type: string, data: any }) => {
-  return (dispatch: ThunkDispatch<{}, {}, Action>) => {
+  return (dispatch: MyThunkDispatch) => {
     const { folderId, type, data } = payload;
     Promise.resolve().then(() => dispatch(addDatasource())).then(() => {
       console.log('type logic', type)
@@ -35,7 +36,7 @@ export const addDatasourcelogic = (payload: { folderId: string, type: string, da
 }
 
 export const loadDatasourceDataLogic = (id: string | null, page: number = 1, row: number = 10) => {
-  return (dispatch: ThunkDispatch<{}, {}, Action>) => {
+  return (dispatch: MyThunkDispatch) => {
     console.log('load data logic', id)
     dispatch(loadDatasourceData());
     dispatch(isLoading());
@@ -55,8 +56,19 @@ export const loadDatasourceDataLogic = (id: string | null, page: number = 1, row
     }).catch(err => {
       console.log('err', err)
     })
-    // } else {
-    //   return Promise.resolve();
-    // }
+  }
+}
+
+export const updateDatasourceLogic = (payload: any) => {
+  return (dispatch: MyThunkDispatch) => {
+    dispatch(updateDatasource());
+    updateDatasourceInfo(payload).then(() => {
+      dispatch(updateDatasourceSuccess(payload))
+    }).then(() => {
+      dispatch(loadDatasourcesLogic(payload.folderId));
+      return Promise.resolve();
+    }).catch((err: any) => {
+      dispatch(updateDatasourceFail(err))
+    })
   }
 }

@@ -21,3 +21,12 @@ export const fetchColumnsUnderFolder = (id: string): Promise<any> => request.get
     folderId: id
   }
 })
+
+export const updateDatasourceInfo = (payload: { id: string, title: string, folderId: string }): Promise<any> => request.put({
+  url: '/api/datasource',
+  data: payload
+})
+
+export const deleteDatasource = (id: string): Promise<any> => request.delete({
+  url: `api/datasource/${id}`
+})

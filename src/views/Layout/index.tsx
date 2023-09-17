@@ -80,11 +80,11 @@ function Layout(props: Iprops) {
           </div>
           <div className={styles['header-right']}>
             {visibility &&
-              <div onClick={handleSaveReports} className={styles['saveBtn-box']}>
+              <><div onClick={handleSaveReports} className={styles['saveBtn-box']}>
                 <SaveOutlined style={{ fontSize: '22px', fontWeight: 200 }} />
                 <span style={{ fontSize: 12, marginTop: '5px' }}>Save</span>
-              </div>}
-            <div> | </div>
+              </div>
+                <div> | </div></>}
             <div className={styles['avator-box']}>
               {/* <img src='' /> */}
               <Avatar style={{ backgroundColor: '#2a5abe', verticalAlign: 'middle' }} size="large" gap={3}>

@@ -4,6 +4,7 @@ import { LoadFoldersActionType } from "@/redux/actionTypes/entities/folder/loadF
 import { createFolder, fetchFolders, updateFolderAPI } from '@/service/modules/folders';
 import { MyThunkDispatch } from "@/redux/typing";
 import { push } from "react-router-redux";
+import { message } from "@/components/Common/EscapeAntd";
 
 export const addFolderLogic = () => {
   return (dispatch: Dispatch<any>) => {
@@ -37,11 +38,16 @@ export const updateFolderLogic = (payload: any) => {
   return (dispatch: MyThunkDispatch) => {
     dispatch(updateFolder())
     updateFolderAPI(payload).then(res => {
-      dispatch(updateFolderSuccess(payload))
-    }).catch(err => {
-      console.log('err', err);
-      dispatch(updateFolderFail(err))
+      dispatch(updateFolderSuccess(payload));
+    }).then(() => {
+      dispatch(loadFoldersLogic());
+      return Promise.resolve();
     })
+      .catch(err => {
+        console.log('err', err);
+        message.error(err.message)
+        dispatch(updateFolderFail(err))
+      })
   }
 }
 

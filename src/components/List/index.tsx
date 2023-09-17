@@ -2,13 +2,21 @@ import styles from './styles.scss'
 import folderImg from '@/assets/images/folder.png';
 import dashImg from '@/assets/images/dash.png';
 import dsImg from '@/assets/images/datsource.png'
-import { Dropdown, Space } from 'antd';
-import { MoreOutlined } from '@ant-design/icons/lib/icons';
+import { Dropdown, Input, Modal, Space } from 'antd';
+import { ExclamationCircleFilled, MoreOutlined } from '@ant-design/icons/lib/icons';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { updateFolderLogic } from '@/redux/actionCreators/entities/folder/logic';
-import { useState } from 'react';
+import { loadFoldersLogic, updateFolderLogic } from '@/redux/actionCreators/entities/folder/logic';
+import { useCallback, useState } from 'react';
 import { IRootState } from '@/redux/Store';
+import EditModal from './EditModal';
+import { deleteFolder } from '@/service/modules/folders';
+import { deleteDashboard } from '@/service/modules/dashboard';
+import { deleteDatasource } from '@/service/modules/datasource';
+import { MyThunkDispatch } from '@/redux/typing';
+import { loadDashboardsLogic } from '@/redux/actionCreators/entities/dashboard/logic';
+import { loadDatasourcesLogic } from '@/redux/actionCreators/entities/datasource/logic';
+const { confirm } = Modal;
 export interface IList {
   title: string,
   id: string,
@@ -20,29 +28,63 @@ interface Iprops {
   list: IList[],
   onOpen: IOpenFunc,
   type: string,
-  updateFolder: (payload: any) => void
+  loadFolders: () => void,
+  loadDashs: (id: string) => void,
+  loadDatasources: (id: string) => void
 }
 function List(props: Iprops) {
   const { list, onOpen, type } = props
   const [curId, setCurId] = useState('');
+  const initialItem: any = {};
+  const [curItem, setCurItem] = useState(initialItem)
+  const [showModal, setShowModal] = useState(false);
   const img: any = {
     folder: folderImg,
     dash: dashImg,
     ds: dsImg
   }
-  const editLogic: any = {
-    folder: props.updateFolder
+  const deletApi: any = {
+    folder: deleteFolder,
+    dash: deleteDashboard,
+    ds: deleteDatasource
+  }
+  const loadLogic: any = {
+    folder: props.loadFolders,
+    dash: props.loadDashs,
+    ds: props.loadDatasources
   }
 
   const handleEdit = () => {
     console.log('type', type);
     console.log('curId', curId);
-
-    editLogic[type]()
+    const curItem = list.find(l => l.id === curId)!
+    setCurItem(curItem);
+    setShowModal(true);
   }
 
-  const handleDelete = () => {
 
+  const handleDelete = () => {
+    const curItem = list.find(l => l.id === curId)!
+    setCurItem(curItem);
+    confirm({
+      title: `Are you sure delete this ${props.type}?`,
+      icon: <ExclamationCircleFilled />,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        deletApi[props.type](curId).then(() => {
+          if (props.type !== 'folder') {
+            loadLogic[props.type](curItem.folderId)
+          } else {
+            loadLogic[props.type]()
+          }
+        })
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
   }
   const items = [
     {
@@ -58,6 +100,13 @@ function List(props: Iprops) {
       </p>)
     }
   ];
+
+  const changeVisibility = () => {
+    setShowModal((showModal) => !showModal);
+    setCurId('');
+    setCurItem('');
+  }
+
   return (
     <div className={styles['folders-wrap']}>
       {list.map((item, i) => (
@@ -68,29 +117,33 @@ function List(props: Iprops) {
           }}>
             <img src={item.img || img[type]} ></img>
           </div>
-          <div className={styles['folder-desc']}>
-            <div className={styles['folder-title']}>{item.title}</div>
-            <div className={styles['folder-operation']}>
-              <Dropdown menu={{ items }} trigger={['click']}>
-                <a onClick={(e) => e.preventDefault()}>
-                  <Space>
-                    <MoreOutlined style={{ fontSize: '20px' }} />
-                  </Space>
-                </a>
-              </Dropdown>
+          <div style={{}}>
+            <div className={styles['folder-descWrap']}>
+              <div className={styles['folder-title']}>{item.title}</div>
+              <div className={styles['folder-operation']}>
+                <Dropdown menu={{ items }} trigger={['click']}>
+                  <a onClick={(e) => e.preventDefault()}>
+                    <Space>
+                      <MoreOutlined style={{ fontSize: '20px' }} onClick={() => { setCurId(item.id) }} />
+                    </Space>
+                  </a>
+                </Dropdown>
+              </div>
             </div>
+            <div className={styles['folder-description']}>{item.description}</div>
           </div>
         </div>
       ))}
+      {showModal && <EditModal type={props.type} item={curItem} changeVisibility={changeVisibility} />}
     </div>
   )
 }
-const mapStateToProps = (state: IRootState) => {
-  return {}
-}
-const mapDispatchToProps = (dispatch: Dispatch<any>) => {
+const mapDispatchToProps = (dispatch: MyThunkDispatch) => {
   return {
-    updateFolder: (payload: any) => dispatch(updateFolderLogic(payload))
+    loadFolders: () => dispatch(loadFoldersLogic()),
+    loadDashs: (id: string) => dispatch(loadDashboardsLogic(id)),
+    loadDatasources: (id: string) => dispatch(loadDatasourcesLogic(id))
   }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(List)
+
+export default connect(null, mapDispatchToProps)(List)

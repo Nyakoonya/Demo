@@ -10,7 +10,7 @@ export const createDashboard = (payload: IDashParams): Promise<any> => request.p
   data: payload
 })
 
-export const updateDashboard = (payload: IDashUpdate): Promise<any> => request.post({
+export const updateDashboard = (payload: IDashUpdate): Promise<any> => request.put({
   url: '/api/dashboards',
   data: payload
 })
