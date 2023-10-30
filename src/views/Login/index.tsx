@@ -10,12 +10,12 @@ export default function () {
       key: '1',
       children: <Login />
     },
-    {
-      id: '2',
-      label: 'Register',
-      key: '2',
-      children: <div>register</div>
-    }
+    // {
+    //   id: '2',
+    //   label: 'Register',
+    //   key: '2',
+    //   children: <div>register</div>
+    // }
   ]
   return (
     <div className={styles["login-container"]}>

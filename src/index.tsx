@@ -3,7 +3,6 @@
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux'
 import App from './App';
-
 import { HashRouter as Router } from 'react-router-dom';
 import routers from './router'
 import { store } from './redux/Store'

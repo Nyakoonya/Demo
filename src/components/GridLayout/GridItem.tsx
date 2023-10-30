@@ -26,11 +26,11 @@ function GridItem(props: IProps, ref: React.Ref<RefInstance>): ReactElement {
   console.log('gridItem---->grid item', gridItem)
   const reportData = _get(gridItem, ['dataSetting', 'data']);
   console.log('reportData', reportData)
-  if (!isEmpty(reportData)) {
+  if (!isEmpty(reportData) || !gridItem || !gridItem.dataSetting) {
     return (
       <div className={styles["item-wrap"]}>
         <div className={styles['item-title']}>{gridItem.title}</div>
-        {props.gridItem.category === 'echarts' ? (<Echarts id={`echarts-${gridItem.id}`} item={gridItem} ref={echartsRef} />) : null}
+        {props.gridItem.category === 'echarts' ? (<Echarts id={`echarts-${gridItem.id}`} item={gridItem} style={{ height: 'calc(100% - 30px)', position: 'relative' }} ref={echartsRef} />) : null}
         {props.gridItem.category === 'table' ? (<div>table</div>) : null}
         {!props.gridItem.category && <div>unknown</div>}
       </div>

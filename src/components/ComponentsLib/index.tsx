@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
-import { Button, Divider, Form, Input, InputNumber, Select } from 'antd';
+import { Button, Divider, Form, Input, InputNumber, Select, message } from 'antd';
 import { components, others } from '../../lib/index';
 import FeildSelection, { IDimension } from "../FeildSelection";
 import { IRootState } from "@/redux/Store";
@@ -8,7 +8,7 @@ import { connect, useSelector } from "react-redux";
 import { loadReportLogic } from "@/redux/actionCreators/entities/reports/logic";
 import { useParams } from "react-router";
 import { IReport } from "@/redux/reducers/ReportReducer";
-
+import OtherTips from '../Common/OthersTips';
 const FormItem = Form.Item;
 interface IProp {
   limit: number,
@@ -72,19 +72,24 @@ function ComLib(props: IProp): ReactNode {
     }
   }
   const handleDone = () => {
-    const dimensions = dimensionRef.current && dimensionRef.current.onPropsChange();
-    const measures = measureRef.current && measureRef.current.onPropsChange();
+    const dimensions = dimensionRef.current && dimensionRef.current.onPropsChange() || [];
+    const measures = measureRef.current && measureRef.current.onPropsChange() || [];
+    if (dimensions.length != dimLimit || measures.length != meaLimit) {
+      message.error({
+        content: `Please add at least ${dimLimit} Dimensions and ${meaLimit} Measures!`
+      })
+    }
     const dataSetting = {
-      dimensions: dimensions.map((d: any) => ({
+      dimensions: dimensions.length > 0 ? dimensions.map((d: any) => ({
         fieldName: d.columnName,
         datasourceId: d.dataSourceId,
         datasourceName: d.title
-      })),
-      measures: measures.map((m: any) => ({
+      })) : [],
+      measures: measures.length > 0 ? measures.map((m: any) => ({
         fieldName: m.columnName,
         datasourceId: m.dataSourceId,
         datasourceName: m.title
-      })),
+      })) : [],
     }
     // redux logic
     const target = props.reports.find(r => r.id === activeReport)
@@ -133,12 +138,14 @@ function ComLib(props: IProp): ReactNode {
           <FormItem label="Report Title">
             <Input value={defaultReportTitle} onChange={handleChangeTitle}></Input>
           </FormItem>
-          <FormItem label="Dimensions">
+          {dimLimit > 0 && <FormItem label="Dimensions">
+            <OtherTips reportType={curChartType} tipType="dimension" />
             <FeildSelection list={props.datasourceFieldsList} selectedFields={defaultDimensions} ref={dimensionRef} label='Add a dimension' limit={dimLimit} />
-          </FormItem>
-          <FormItem label="Measures">
+          </FormItem>}
+          {meaLimit > 0 && <FormItem label="Measures">
+            <OtherTips reportType={curChartType} tipType="measure" />
             <FeildSelection list={props.datasourceFieldsList} selectedFields={defaultMeasures} ref={measureRef} label='Add a measure' limit={meaLimit} />
-          </FormItem>
+          </FormItem>}
           <FormItem label="Limit">
             <InputNumber min={1} max={20000} defaultValue={limit} onChange={handleChangeLimit}></InputNumber>
           </FormItem>
