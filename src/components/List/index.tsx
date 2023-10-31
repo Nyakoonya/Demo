@@ -3,7 +3,7 @@ import folderImg from '@/assets/images/folder.png';
 import dashImg from '@/assets/images/dash.png';
 import dsImg from '@/assets/images/datsource.png'
 import { Dropdown, Input, Modal, Space } from 'antd';
-import { ExclamationCircleFilled, MoreOutlined } from '@ant-design/icons/lib/icons';
+import { ExclamationCircleFilled, ExclamationCircleTwoTone, MoreOutlined } from '@ant-design/icons/lib/icons';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { loadFoldersLogic, updateFolderLogic } from '@/redux/actionCreators/entities/folder/logic';
@@ -26,7 +26,7 @@ export interface IList {
 type IOpenFunc = (id: string) => void
 interface Iprops {
   list: IList[],
-  onOpen: IOpenFunc,
+  onOpen?: IOpenFunc,
   type: string,
   loadFolders: () => void,
   loadDashs: (id: string) => void,
@@ -67,7 +67,7 @@ function List(props: Iprops) {
     const curItem = list.find(l => l.id === curId)!
     setCurItem(curItem);
     confirm({
-      title: `Are you sure delete this ${props.type}?`,
+      title: `Are you sure to delete this ${props.type}?`,
       icon: <ExclamationCircleFilled />,
       okText: 'Yes',
       okType: 'danger',
@@ -86,7 +86,24 @@ function List(props: Iprops) {
       },
     });
   }
-  const items = [
+  const handleSetIndexPage = () => {
+    const curItem = list.find(l => l.id === curId)!
+    setCurItem(curItem);
+    confirm({
+      title: `You want to set [${curItem.title}] as index page?`,
+      icon: <ExclamationCircleTwoTone />,
+      okText: 'Yes',
+      okType: 'primary',
+      cancelText: 'No',
+      onOk() {
+
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+  }
+  let items = [
     {
       key: '1',
       label: (<p onClick={handleEdit}>
@@ -100,6 +117,14 @@ function List(props: Iprops) {
       </p>)
     }
   ];
+  if (props.type == 'dash') {
+    items.unshift({
+      key: '0',
+      label: (<p onClick={handleSetIndexPage}>
+        Set as index page
+      </p>)
+    })
+  }
 
   const changeVisibility = () => {
     setShowModal((showModal) => !showModal);
@@ -113,7 +138,7 @@ function List(props: Iprops) {
         <div className={styles['folder-card']} key={item.id}>
           <div className={styles['folder-img']} onClick={() => {
             setCurId(item.id)
-            onOpen(item.id)
+            onOpen && onOpen(item.id)
           }}>
             <img src={item.img || img[type]} ></img>
           </div>

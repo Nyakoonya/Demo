@@ -22,6 +22,7 @@ interface IProps {
   changeActiveReport: (id: string | null) => void
   removeReport: (id: string) => void,
   updateReports: (reports: IReport[]) => void
+  disabled?: boolean
   // newReport: IReport
 }
 
@@ -38,16 +39,18 @@ function GridLayout(props: IProps) {
     console.log('widgets', widgets)
     return widgets.map((item, i) => (
       <div key={item.content.layout.i} data-grid={item.content.layout} onClick={(e) => onSelected(e, item)}>
-        <span className='remove' onClick={() => onRemoveItem(item.id)}><CloseOutlined /></span>
-        <GridItem gridItem={item} ref={gridRef} />
+        {!props.disabled && <span className='remove' onClick={() => onRemoveItem(item.id)}><CloseOutlined /></span>}
+        <GridItem gridItem={item} ref={gridRef} disabled />
       </div>
     ))
   }
   const onSelected = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, item: IReport) => {
-    console.log('selected', item.id)
-    e.stopPropagation();
-    // redux change active report
-    props.changeActiveReport(item.id);
+    if (!props.disabled) {
+      console.log('selected', item.id)
+      e.stopPropagation();
+      // redux change active report
+      props.changeActiveReport(item.id);
+    }
   }
   // when remove a widget
   const onRemoveItem = (id: string) => {
@@ -99,6 +102,8 @@ function GridLayout(props: IProps) {
         className='layout'
         onLayoutChange={onLayoutChange}
         onBreakpointChange={onBreakpointChange}
+        isDraggable={!props.disabled}
+        isResizable={!props.disabled}
       >
         {generateDom(reports)}
       </ResponsiveReactGridLayout></div>

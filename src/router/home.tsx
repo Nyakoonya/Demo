@@ -10,8 +10,8 @@ const routes: SyncRoute.Routes[] = [
   },
   {
     path: "/",
-    title: 'Home',
-    element: lazy(() => import("../views/Home")),
+    title: 'IndexPage',
+    element: lazy(() => import("../views/IndexPage")),
   },
   {
     path: "/folders",

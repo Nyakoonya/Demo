@@ -6,7 +6,8 @@ import { ReactElement, forwardRef, useImperativeHandle, useRef } from 'react';
 import { isEmpty, get as _get } from 'lodash';
 import ErrorBoundry from '../ErrorBoundry';
 interface IProps {
-  gridItem: IReport
+  gridItem: IReport,
+  disabled?: boolean
 }
 interface RefInstance {
   resize: () => void
@@ -28,7 +29,7 @@ function GridItem(props: IProps, ref: React.Ref<RefInstance>): ReactElement {
   console.log('reportData', reportData)
   if (!isEmpty(reportData) || !gridItem || !gridItem.dataSetting) {
     return (
-      <div className={styles["item-wrap"]}>
+      <div className={styles[!props.disabled ? "item-wrap" : "item-wrap-disabled"]}>
         <div className={styles['item-title']}>{gridItem.title}</div>
         {props.gridItem.category === 'echarts' ? (<Echarts id={`echarts-${gridItem.id}`} item={gridItem} style={{ height: 'calc(100% - 30px)', position: 'relative' }} ref={echartsRef} />) : null}
         {props.gridItem.category === 'table' ? (<div>table</div>) : null}

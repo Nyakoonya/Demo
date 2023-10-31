@@ -11,7 +11,7 @@ export default function AuthRouter(props: Iprops) {
   // const token = '11'
   if (token) {
     if (location.pathname == '/login') {
-      return <Navigate to={'/folders'} replace={true}></Navigate>
+      return <Navigate to={'/'} replace={true}></Navigate>
     }
     return <>{children}</>
   } else {

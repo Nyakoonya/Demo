@@ -53,7 +53,7 @@ function FoldersPage(props: Iprops) {
   }
   useEffect(() => {
     props.loadDashboards(folderId)
-  }, [])
+  }, [folderId])
 
   const onAddDashboard = () => {
     console.log('create dash in folderId', params.folderId);

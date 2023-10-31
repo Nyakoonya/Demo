@@ -5,9 +5,28 @@
 <head>
   <meta charset="UTF-8">
   <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge">  -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no,initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <title>Demo work of Yuwei</title>
+  <link rel="stylesheet" href="css/pc.css" type="text/css" media='screen 
+and (min-width: 480px)' />
+  <link rel="stylesheet" href="css/mobile.css" type="text/css" media='screen 
+and (max-width: 479px)' />
   <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBMCCBrsYe7_F0b3190kTpdxnsFm0BRW-s'></script>
+  <script src="./node_modules/amfe-flexible/index.js"></script>
+  <style>
+    @media only screen and (min-width:751px) and (orientation:portrait) {
+      html {
+        font-size: 16px;
+      }
+    }
+
+    @media only screen and (max-width:750px) and (orientation:portrait) {
+      html {
+        font-size: 12px;
+      }
+    }
+  </style>
 </head>
 
 <body>

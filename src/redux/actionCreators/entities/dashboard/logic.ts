@@ -14,6 +14,7 @@ import { createDashboard, fetchDashboards } from "@/service/modules/dashboard";
 import { push, RouterAction } from 'react-router-redux';
 import { MyThunkDispatch } from "@/redux/typing";
 import { updateDashboard as updateDashboardAPI } from "@/service/modules/dashboard";
+import { isEmpty } from "lodash";
 
 /* add dashboard */
 export const addDashboardLogic = (folderId: string) => {
@@ -31,6 +32,13 @@ export const addDashboardLogic = (folderId: string) => {
 /* load dashboards */
 export const loadDashboardsLogic = (payload: any) => {
   return (dispatch: Dispatch<LoadDashboardsActionType | RouterAction>) => {
+    const popFolderIds = !isEmpty(localStorage.getItem('popFolders')) ? JSON.parse(localStorage.getItem('popFolders')!) : [];
+    console.log('popFolderIds---from local', popFolderIds)
+    let newFolderIds = popFolderIds.filter((f: any) => f != payload);
+    newFolderIds.unshift(payload);
+    newFolderIds = newFolderIds.slice(0, 4);
+    console.log('newFolderIds----->>>final', newFolderIds)
+    localStorage.setItem('popFolders', JSON.stringify(newFolderIds));
     fetchDashboards({ folderId: payload }).then(res => {
       console.log('res fetch dash', res)
       const { data: list } = res;

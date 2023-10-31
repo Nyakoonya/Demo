@@ -18,3 +18,7 @@ export const updateDashboard = (payload: IDashUpdate): Promise<any> => request.p
 export const deleteDashboard = (id: string): Promise<any> => request.delete({
   url: `/api/dashboards/${id}`
 })
+
+export const getIndexPageDash = (): Promise<any> => request.get({
+  url: '/api/dashboards/getMainPage'
+})

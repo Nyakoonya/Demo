@@ -47,7 +47,7 @@ function Layout(props: Iprops) {
       }
     })
   }
-
+  /* need rewrite */
   const location = useLocation();
   const params = Object.values(routerParams);
   const pathSnippets = location.pathname.split('/').filter((i) => i);
@@ -74,26 +74,25 @@ function Layout(props: Iprops) {
         <div className={styles['header-wrap']}>
           <div className={styles['header-left']}>
             <div className={styles['logo-box']}>
-              {/* <img src='' /> */}
-              N-BI
+              Data Visualizer
             </div>
           </div>
           <div className={styles['header-right']}>
             {visibility &&
               <><div onClick={handleSaveReports} className={styles['saveBtn-box']}>
-                <SaveOutlined style={{ fontSize: '22px', fontWeight: 200 }} />
-                <span style={{ fontSize: 12, marginTop: '5px' }}>Save</span>
+                <SaveOutlined style={{ fontSize: '2rem', fontWeight: 200 }} />
+                <span style={{ fontSize: '0.8rem', marginTop: '.4rem' }}>Save</span>
               </div>
                 <div> | </div></>}
             <div className={styles['avator-box']}>
               {/* <img src='' /> */}
-              <Avatar style={{ backgroundColor: '#2a5abe', verticalAlign: 'middle' }} size="large" gap={3}>
+              <Avatar style={{ backgroundColor: '#2a5abe', verticalAlign: 'middle', fontSize: '.9rem' }} size="large" gap={3}>
                 {user}
               </Avatar>
             </div>
             <div className={styles['menu-button-box']}>
               <Button type="primary" onClick={() => setOpen(true)}>
-                <MenuOutlined style={{ fontSize: '24px' }} />
+                <MenuOutlined style={{ fontSize: '1.6rem' }} />
               </Button>
               <Drawer title="Basic Drawer" placement="right" onClose={() => setOpen(false)} open={open}>
                 <p>Some contents...</p>
@@ -112,7 +111,7 @@ function Layout(props: Iprops) {
         <Fragment>{props.children}</Fragment>
       </div>
       <footer>
-        <div className={styles['footer']}>Footer Content.</div>
+        <div className={styles['footer']}>Made with ❤ by Yuwei</div>
       </footer>
     </div>
   )

@@ -1,0 +1,10 @@
+body {
+  min-width: 1000px;
+  max-width: 2080px;
+  /* flexible 给我们划分了 10 等份,所以应该是10rem */
+  width: 10rem;
+  margin: 0 auto;
+  line-height: 1.5;
+  font-family: Arial, Helvetica;
+  /* background: #f2f2f2; */
+}
