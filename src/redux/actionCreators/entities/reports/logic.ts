@@ -5,13 +5,16 @@ import { fetchReportData, fetchReports, saveReportsUnderDash } from "@/service/m
 import { IReport } from "@/redux/reducers/ReportReducer";
 import { generateContent } from "@/utils/generateContent";
 import { MyThunkDispatch, MyThunkResult } from "@/redux/typing";
+import { loadDashboardsLogic } from "../dashboard/logic";
 // const shortid = require('shortid');
 // type MyThunkResult<R> = ThunkAction<R, IRootState, undefined, Action>;
 // type MyThunkDispatch = ThunkDispatch<IRootState, undefined, Action>;
 export const loadReportsLogic = (
+  folderId: string | number,
   dashId: string, isPush: boolean
 ) => {
   return (dispatch: MyThunkDispatch, getState: () => IRootState) => {
+    dispatch(loadDashboardsLogic(folderId, true))
     const state = getState();
     fetchReports(dashId).then(res => {
       console.log('res---->>>>load reports', res)

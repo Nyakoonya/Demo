@@ -22,12 +22,13 @@ function GridItem(props: IProps, ref: React.Ref<RefInstance>): ReactElement {
   })
   const handleResize = () => {
     console.log('gridItem resize')
+    console.log('gridItem---->grid item', gridItem)
     echartsRef.current && echartsRef.current.resize()
   }
-  console.log('gridItem---->grid item', gridItem)
   const reportData = _get(gridItem, ['dataSetting', 'data']);
   console.log('reportData', reportData)
   if (!isEmpty(reportData) || !gridItem || !gridItem.dataSetting) {
+    console.log('props.disabled===>>>', props.disabled)
     return (
       <div className={styles[!props.disabled ? "item-wrap" : "item-wrap-disabled"]}>
         <div className={styles['item-title']}>{gridItem.title}</div>

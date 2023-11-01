@@ -30,7 +30,7 @@ function GridLayout(props: IProps) {
   // const { reports } = props;
   const reports = useSelector((state: IRootState) => state.reports.entity)
   console.log('reports in dash', reports)
-  const gridRef = useRef<any>(null)
+  const gridRef = useRef<any>({})
   const initialLayouts = reports.map(r => r.content.layout)
   const [layouts, setLayouts] = useState({ lg: initialLayouts })
   // initial render of widgets in redux
@@ -40,7 +40,7 @@ function GridLayout(props: IProps) {
     return widgets.map((item, i) => (
       <div key={item.content.layout.i} data-grid={item.content.layout} onClick={(e) => onSelected(e, item)}>
         {!props.disabled && <span className='remove' onClick={() => onRemoveItem(item.id)}><CloseOutlined /></span>}
-        <GridItem gridItem={item} ref={gridRef} disabled />
+        <GridItem gridItem={item} ref={gridRef.current[item.id] ??= { current: null }} key={item.id} disabled={props.disabled} />
       </div>
     ))
   }
@@ -81,7 +81,10 @@ function GridLayout(props: IProps) {
       console.log('newReports', newReports)
       props.updateReports(newReports)
     }
-    gridRef.current && gridRef.current.resize()
+    console.log('gridRef.current', gridRef.current)
+    reports.map(report => {
+      gridRef.current && gridRef.current[report.id].current && gridRef.current[report.id].current.resize()
+    })
 
   }
 
@@ -119,7 +122,7 @@ const mapStateToProps = (states: IRootState) => {
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
     addReport: (report: IReport) => addReportSuccess(report),
-    loadReports: (id: string, isPush: boolean) => dispatch(loadReportsLogic(id, isPush)),
+    // loadReports: (id: string, isPush: boolean) => dispatch(loadReportsLogic(id, isPush)),
     changeActiveReport: (id: string | null) => dispatch(changeActiveReport(id)),
     removeReport: (id: string) => dispatch(removeReportSuccess(id)),
     updateReports: (reports: IReport[]) => dispatch(updateReportsSuccess(reports))

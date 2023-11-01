@@ -15,8 +15,12 @@ export const updateDashboard = (payload: IDashUpdate): Promise<any> => request.p
   data: payload
 })
 
-export const deleteDashboard = (id: string): Promise<any> => request.delete({
+export const deleteDashboard = (id: string | number): Promise<any> => request.delete({
   url: `/api/dashboards/${id}`
+})
+
+export const setIndexPageDash = (id: string | number): Promise<any> => request.post({
+  url: `/api/dashboards/setmainpagedashboard/${id}`
 })
 
 export const getIndexPageDash = (): Promise<any> => request.get({

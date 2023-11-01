@@ -7,15 +7,17 @@ import { loadDashboardsLogic } from '@/redux/actionCreators/entities/dashboard/l
 import { useEffect, useRef, useState } from 'react';
 import { loadFoldersLogic } from '@/redux/actionCreators/entities/folder/logic';
 import { compact, isEmpty } from 'lodash';
-import { Card } from 'antd';
+import { Button, Card } from 'antd';
 import GridLayout from '@/components/GridLayout';
 import { loadReportsLogic } from '@/redux/actionCreators/entities/reports/logic';
 import { getIndexPageDash } from '@/service/modules/dashboard';
+import { push } from 'react-router-redux';
+import { Link } from 'react-router-dom';
 interface IProp {
   folders: IList[],
   loadFolders: () => void,
   loadDashboards: (id: string) => void,
-  loadReports: (dashId: string, isPush: boolean) => void,
+  loadReports: (folderId: string | number, dashId: string, isPush: boolean) => void,
 }
 const IndexPage = (props: IProp) => {
   /* index page */
@@ -24,12 +26,12 @@ const IndexPage = (props: IProp) => {
   const [curIndexFolderTitle, setCurIndexFolderTitle] = useState('');
   useEffect(() => {
     getIndexPageDash().then(res => {
-      const { data: { dashId, folderTitle, dashTitle } } = res;
+      const { data: { dashId, folderId, folderTitle, dashTitle } } = res;
       if (dashId) {
         setCurIndexDashId(dashId);
         setCurIndexFolderTitle(folderTitle);
         setCurIndexDashTitle(dashTitle)
-        props.loadReports(dashId, false)
+        props.loadReports(folderId, dashId, false)
       }
     })
   }, [])
@@ -66,7 +68,9 @@ const IndexPage = (props: IProp) => {
       setPopFolders(newData);
     }
   }, [props.folders]);
-
+  const handleSeeAllFolders = () => {
+    push('/folders');
+  }
 
 
   return (<div>
@@ -83,6 +87,10 @@ const IndexPage = (props: IProp) => {
     <div className={styles["folders-box"]}>
       <p>Popular Chart Folders</p>
       <div className={styles["popular-folders"]}>
+        <div className={styles['seeAll-btn']}>
+          <Button onClick={handleSeeAllFolders} type="primary">
+            <Link to={'/folders'} replace={true}>See All</Link>
+          </Button></div>
         <List list={popFolders} onOpen={props.loadDashboards} type={'folder'} />
       </div>
     </div>
@@ -97,7 +105,7 @@ const mapDispatchToProps = (dispatch: MyThunkDispatch) => {
   return {
     loadFolders: () => dispatch(loadFoldersLogic()),
     loadDashboards: (id: string) => dispatch(loadDashboardsLogic(id)),
-    loadReports: (dashId: string, isPush: boolean) => dispatch(loadReportsLogic(dashId, isPush)),
+    loadReports: (folderId: string | number, dashId: string, isPush: boolean) => dispatch(loadReportsLogic(folderId, dashId, isPush)),
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(IndexPage);

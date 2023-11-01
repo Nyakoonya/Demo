@@ -16,7 +16,6 @@ interface IProp {
 
 const Login = (props: IProp) => {
   const onFinish = (values: any) => {
-    console.log('Success:', values);
     const { username, password } = values
     props.login(username, encode(password))
   };

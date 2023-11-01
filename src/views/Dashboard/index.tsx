@@ -16,7 +16,7 @@ import { loadReportsLogic } from "@/redux/actionCreators/entities/reports/logic"
 import { changeActiveReport } from "@/redux/actionCreators/entities/constant";
 interface Iprops {
   reports: IReport[],
-  loadReports: (dashId: string, isPush: boolean) => void,
+  loadReports: (folderId: string | number, dashId: string, isPush: boolean) => void,
   changeActiveReport: (id: string | null) => void
 }
 function Dashboard(props: Iprops) {
@@ -33,7 +33,7 @@ function Dashboard(props: Iprops) {
     })
   }, [])
   useEffect(() => {
-    props.loadReports(dashId, false)
+    props.loadReports(folderId, dashId, false)
   }, [])
   const tabsItems = [
     {
@@ -77,7 +77,7 @@ function Dashboard(props: Iprops) {
       </div>
       <div className={styles["right-layout"]}>
         <Card style={{ width: '100%', height: '100%' }} onClick={(e) => handleClick(e)}>
-          <GridLayout></GridLayout>
+          <GridLayout disabled={false}></GridLayout>
         </Card>
 
       </div>
@@ -93,7 +93,7 @@ const mapStateToProps = (states: IRootState) => {
 }
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
-    loadReports: (dashId: string, isPush: boolean) => dispatch(loadReportsLogic(dashId, isPush)),
+    loadReports: (folderId: string | number, dashId: string, isPush: boolean) => dispatch(loadReportsLogic(folderId, dashId, isPush)),
     changeActiveReport: (id: string | null) => dispatch(changeActiveReport(id))
   }
 }

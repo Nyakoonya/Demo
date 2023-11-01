@@ -7,6 +7,11 @@ import { HashRouter as Router } from 'react-router-dom';
 import routers from './router'
 import { store } from './redux/Store'
 import { ConfigProvider } from 'antd';
+import { StyleProvider, px2remTransformer } from '@ant-design/cssinjs';
+import { isPC } from './utils/checkBrowser';
+const px2rem = px2remTransformer({
+  rootValue: isPC() ? 16 : 12, // 32px = 1rem; @default 16
+});
 const root = document.getElementById('root');
 
 console.log('NODE_ENV', process.env.NODE_ENV)
@@ -34,7 +39,9 @@ if (root) {
             }
           }}
         >
-          <App />
+          <StyleProvider transformers={[px2rem]}>
+            <App />
+          </StyleProvider>
         </ConfigProvider>
       </Router>
     </Provider>

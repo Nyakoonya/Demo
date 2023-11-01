@@ -11,11 +11,12 @@ import { useCallback, useState } from 'react';
 import { IRootState } from '@/redux/Store';
 import EditModal from './EditModal';
 import { deleteFolder } from '@/service/modules/folders';
-import { deleteDashboard } from '@/service/modules/dashboard';
+import { deleteDashboard, setIndexPageDash } from '@/service/modules/dashboard';
 import { deleteDatasource } from '@/service/modules/datasource';
 import { MyThunkDispatch } from '@/redux/typing';
 import { loadDashboardsLogic } from '@/redux/actionCreators/entities/dashboard/logic';
 import { loadDatasourcesLogic } from '@/redux/actionCreators/entities/datasource/logic';
+import { message } from '../Common/EscapeAntd';
 const { confirm } = Modal;
 export interface IList {
   title: string,
@@ -96,7 +97,16 @@ function List(props: Iprops) {
       okType: 'primary',
       cancelText: 'No',
       onOk() {
-
+        setIndexPageDash(curId).then((res) => {
+          const { code, msg } = res;
+          if (code === 0) {
+            message.success(msg)
+          } else {
+            message.error(msg)
+          }
+        }).catch((err) => {
+          message.error(err.message)
+        })
       },
       onCancel() {
         console.log('Cancel');

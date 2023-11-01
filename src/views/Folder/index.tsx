@@ -21,7 +21,7 @@ interface Iprops {
   datasources: any[],
   isLoading: boolean,
   isDone: boolean,
-  loadReports: (id: string, isPush: boolean) => void,
+  loadReports: (folderId: string | number, id: string, isPush: boolean) => void,
   addDashboard: (id: string) => void,
   loadDashboards: (id: string) => void,
   loadDatasources: (id: string) => void,
@@ -86,7 +86,7 @@ function FoldersPage(props: Iprops) {
         <Button type="primary" onClick={onAddDashboard} style={{ marginRight: '40px' }}>Create a dashboard</Button>
       </div>
 
-        <List list={dashboards} onOpen={(id) => loadReports(id, true)} type={'dash'} /></>
+        <List list={dashboards} onOpen={(id) => loadReports(folderId, id, true)} type={'dash'} /></>
     },
     {
       label: 'Datasources',
@@ -118,7 +118,7 @@ const mapStateToProps = (states: IRootState) => {
 }
 const mapDispatchToProps = (dispatch: Dispatch<any>) => {
   return {
-    loadReports: (id: string, isPush: boolean) => dispatch(loadReportsLogic(id, isPush)),
+    loadReports: (folderId: string | number, id: string, isPush: boolean) => dispatch(loadReportsLogic(folderId, id, isPush)),
     loadDashboards: (id: string) => dispatch(loadDashboardsLogic(id)),
     addDashboard: (id: string) => dispatch(addDashboardLogic(id)),
     loadDatasources: (id: string) => dispatch(loadDatasourcesLogic(id)),

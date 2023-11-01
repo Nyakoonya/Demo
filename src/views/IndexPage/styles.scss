@@ -30,6 +30,10 @@
     box-sizing: border-box;
     margin-top: 0.5rem;
     flex: 1;
-    // border: 0.1rem solid red;
+    .seeAll-btn {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0 3rem;
+    }
   }
 }
