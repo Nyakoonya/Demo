@@ -1,5 +1,6 @@
 import { IRootState } from "@/redux/Store";
 import { loadDatasourceDataLogic } from "@/redux/actionCreators/entities/datasource/logic";
+import { MyThunkDispatch } from "@/redux/typing";
 import { Modal, Pagination, Table } from "antd";
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from "react";
 import { connect } from "react-redux";
@@ -11,7 +12,7 @@ interface IProp {
   getDatasource: (id: string | null) => any,
   datasources: any[],
   changeVisibility: () => void,
-  loadDatasourceData: (id: string | null, page: number, row: number) => void,
+  loadDatasourceData: (id: string | number | null, page: number, row: number) => void,
   data: any
 }
 interface IRef {
@@ -62,7 +63,7 @@ const DSData = forwardRef((props: IProp, ref: React.Ref<IRef>) => {
     return (
       <Modal title="View Data" open={visible} onCancel={handleClose} footer={null} width={1000}>
         <Table dataSource={tableData} columns={columns} pagination={{ position: [] }} />
-        <Pagination simple defaultCurrent={2} total={total} style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }} onChange={changePage} />
+        <Pagination simple defaultCurrent={1} total={total} style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }} onChange={changePage} />
       </Modal>
     )
   } catch (error) {
@@ -77,9 +78,9 @@ const mapStateToProps = (states: IRootState) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, Action>) => {
+const mapDispatchToProps = (dispatch: MyThunkDispatch) => {
   return {
-    loadDatasourceData: (id: string | null, page: number, row: number) => dispatch(loadDatasourceDataLogic(id, page, row))
+    loadDatasourceData: (id: string | number | null, page: number, row: number) => dispatch(loadDatasourceDataLogic(id, page, row))
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps, null, { forwardRef: true })(DSData);

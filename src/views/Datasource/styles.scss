@@ -1,14 +1,26 @@
 .ds-item {
-  width: 200px;
-  height: 150px;
-  margin-right: 20px;
+  width: 12rem;
+  height: 9rem;
+  margin-right: 1.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  &:hover,
-  &:active {
+  &:hover {
     border: 1px solid #eee;
     border-radius: 5px;
+    box-shadow: 0px 0px 10px #eee;
   }
+}
+.ds-item-active {
+  width: 12rem;
+  height: 9rem;
+  margin-right: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  border: 1px solid #91a6d4;
+  border-radius: 5px;
+  box-shadow: 0px 0px 8px #a5bef4;
 }

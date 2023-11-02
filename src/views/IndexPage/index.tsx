@@ -26,21 +26,22 @@ const IndexPage = (props: IProp) => {
   const [curIndexFolderTitle, setCurIndexFolderTitle] = useState('');
   useEffect(() => {
     getIndexPageDash().then(res => {
-      const { data: { dashId, folderId, folderTitle, dashTitle } } = res;
-      if (dashId) {
-        setCurIndexDashId(dashId);
-        setCurIndexFolderTitle(folderTitle);
-        setCurIndexDashTitle(dashTitle)
-        props.loadReports(folderId, dashId, false)
+      if (res && res.data) {
+        const { data: { dashId, folderId, folderTitle, dashTitle } } = res;
+        if (folderId && dashId) {
+          setCurIndexDashId(dashId);
+          setCurIndexFolderTitle(folderTitle);
+          setCurIndexDashTitle(dashTitle)
+          props.loadReports(folderId, dashId, false)
+        }
       }
+    }).catch(err => {
+      console.log('err', err)
     })
   }, [])
   /* popular folders */
   const initialPopFolders: IList[] = [];
   const [popFolders, setPopFolders] = useState(initialPopFolders);
-  // useEffect(() => {
-  //   props.loadFolders();
-  // }, [])
   const mounted = useRef(false);
   useEffect(() => {
     const { folders } = props;

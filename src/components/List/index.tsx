@@ -152,7 +152,7 @@ function List(props: Iprops) {
           }}>
             <img src={item.img || img[type]} ></img>
           </div>
-          <div style={{}}>
+          <div style={{ width: '100%' }}>
             <div className={styles['folder-descWrap']}>
               <div className={styles['folder-title']}>{item.title}</div>
               <div className={styles['folder-operation']}>

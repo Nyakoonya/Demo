@@ -31,6 +31,13 @@
       justify-content: space-between;
       align-items: center;
     }
+    .folder-title,
+    .folder-description {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
     .folder-operation {
       cursor: pointer;
       &:hover {
@@ -38,9 +45,11 @@
       }
     }
     .folder-description {
-      font-size: 12px;
-      padding: 0 15px 15px 15px;
+      width: 100%;
+      font-size: 0.8rem;
+      padding: 0 0.9rem 0.9rem 0.9rem;
       color: #9b9c9f;
+      box-sizing: border-box;
     }
   }
 }
