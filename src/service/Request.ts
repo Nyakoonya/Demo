@@ -49,26 +49,28 @@ class Request {
             message.error(data.msg);
             return data;
           }
-        } else {
-          const { data } = res.response;
-          // handle with the response 
-          Promise.resolve().then(() => {
-            throw new AuthError(data)
-          }).catch(err => {
-            if (err.status == 401 || err.status == 403) {
-              Promise.resolve().then(() => {
-                store.dispatch(logoutSuccess())
-                localStorage.removeItem('token');
-                localStorage.removeItem('userData');
-              }).then(() => {
-                message.error(err.message)
-              }).then(() => {
-                history.push('/login')
-              })
-            }
-          })
-
         }
+        // else {
+        //   const { data } = res.response;
+        //   // handle with the response 
+        //   Promise.resolve().then(() => {
+        //     throw new AuthError(data)
+        //   }).catch(err => {
+        //     if (err.status == 401 || err.status == 403) {
+        //       Promise.resolve().then(() => {
+        //         store.dispatch(logoutSuccess())
+        //         localStorage.removeItem('token');
+        //         localStorage.removeItem('userData');
+        //       }).then(() => {
+        //         message.error(err.message)
+        //       }).then(() => {
+        //         history.push('/login');
+        //         // Promise.reject(err);
+        //       })
+        //     }
+        //   })
+
+        // }
       },
       (err) => {
         console.log('err interceptor', err)

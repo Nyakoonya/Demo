@@ -67,7 +67,7 @@ function ComLib(props: IProp): ReactNode {
     }
   }
   const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target && e.target.value) {
+    if (e.target && e.target.value != null) {
       setReportTitle(e.target.value)
     }
   }
@@ -136,7 +136,7 @@ function ComLib(props: IProp): ReactNode {
         <Divider>Data Settings</Divider>
         {defaultCompType && (<>
           <FormItem label="Report Title">
-            <Input value={defaultReportTitle} onChange={handleChangeTitle}></Input>
+            <Input value={defaultReportTitle} onChange={handleChangeTitle} showCount maxLength={50}></Input>
           </FormItem>
           {dimLimit > 0 && <FormItem label="Dimensions">
             <OtherTips reportType={curChartType} tipType="dimension" />

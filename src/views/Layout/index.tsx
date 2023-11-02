@@ -9,6 +9,7 @@ import { Avatar, Breadcrumb, Button, Drawer, message } from "antd";
 import { HomeOutlined, MenuOutlined, SaveOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import routes from "@/router/home";
+import IntroPage from "../IntroPage";
 interface Iprops {
   children: any,
   reports: IReport[],
@@ -89,13 +90,13 @@ function Layout(props: Iprops) {
   extraBreadcrumbItems = extraBreadcrumbItems.map((item, index) => ({
     url: item.url,
     key: item.key,
-    title: index == extraBreadcrumbItems.length - 1 ? <span>{item.title}</span> : <Link to={item.url}>{item.title}</Link>
+    title: index == extraBreadcrumbItems.length - 1 ? <span className={styles['breadcrumb-title']}>{item.title}</span> : <Link to={item.url} ><span className={styles['breadcrumb-title']}>{item.title}</span></Link>
   }))
   console.log('extraBreadcrumbItems', extraBreadcrumbItems)
   extraBreadcrumbItems.shift();
   const breadcrumbItems = [
     {
-      title: extraBreadcrumbItems.length == 0 ? null : <Link to="/"><HomeOutlined /></Link>,
+      title: extraBreadcrumbItems.length == 0 ? <span className={styles['breadcrumb-title']}><HomeOutlined /></span> : <Link to="/"><HomeOutlined /></Link>,
       key: 'home',
     },
   ].concat(extraBreadcrumbItems);
@@ -112,7 +113,7 @@ function Layout(props: Iprops) {
           <div className={styles['header-right']}>
             {visibility &&
               <><div onClick={handleSaveReports} className={styles['saveBtn-box']}>
-                <SaveOutlined style={{ fontSize: '2rem', fontWeight: 200 }} />
+                <SaveOutlined style={{ fontSize: '1.5rem', fontWeight: 200 }} />
                 <span style={{ fontSize: '0.8rem', marginTop: '.4rem' }}>Save</span>
               </div>
                 <div> | </div></>}
@@ -127,19 +128,16 @@ function Layout(props: Iprops) {
                 <MenuOutlined style={{ fontSize: '1.6rem' }} />
               </Button>
               <Drawer title="About Me" placement="right" onClose={() => setOpen(false)} open={open}>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
+                <IntroPage />
               </Drawer>
             </div>
           </div>
         </div>
-      </header>
-      <div className={styles['content']}>
         <div className={styles['breadcrumb-box']}>
           <Breadcrumb items={breadcrumbItems} />
         </div>
-
+      </header>
+      <div className={styles['content']}>
         <Fragment>{props.children}</Fragment>
       </div>
       <footer>

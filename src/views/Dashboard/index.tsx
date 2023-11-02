@@ -42,12 +42,12 @@ function Dashboard(props: Iprops) {
       icon: InboxOutlined,
       children: <ComLib limit={10} datasourceFieldsList={fieldList}></ComLib>
     },
-    {
-      id: '2',
-      title: 'StyleTab',
-      icon: LayoutOutlined,
-      children: <StyleTab></StyleTab>
-    }
+    // {
+    //   id: '2',
+    //   title: 'StyleTab',
+    //   icon: LayoutOutlined,
+    //   children: <StyleTab></StyleTab>
+    // }
   ];
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     console.log('click blank----->>>')

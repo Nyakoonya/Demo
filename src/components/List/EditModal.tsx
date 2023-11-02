@@ -76,10 +76,10 @@ function EditModal(props: IProp) {
     <Modal title={`Edit ${props.type} Info`} onOk={handleOk} onCancel={handleCancel} open={isOpen}>
       <Form {...layout}>
         <Form.Item label="Title" name='title' initialValue={props.item.title} rules={[{ required: true, message: 'Please input title!' }]}>
-          <Input onChange={changeTitle} />
+          <Input onChange={changeTitle} showCount maxLength={50} />
         </Form.Item>
         {props.type !== 'ds' && <Form.Item label="Description" name="description" initialValue={props.item.description}>
-          <Input onChange={changeDesc} />
+          <Input onChange={changeDesc} showCount maxLength={100} />
         </Form.Item>}
       </Form>
     </Modal>

@@ -1,0 +1,18 @@
+.avatar-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.avator {
+  display: inline-block;
+  position: relative;
+  width: 10rem;
+  height: 10rem;
+  overflow: hidden;
+  border-radius: 50%;
+  img {
+    width: auto;
+    height: 100%;
+    margin-left: -10%;
+  }
+}

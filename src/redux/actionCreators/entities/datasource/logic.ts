@@ -35,7 +35,7 @@ export const addDatasourcelogic = (payload: { folderId: string, type: string, da
   }
 }
 
-export const loadDatasourceDataLogic = (id: string | null, page: number = 1, row: number = 10) => {
+export const loadDatasourceDataLogic = (id: string | number | null, page: number = 1, row: number = 10) => {
   return (dispatch: MyThunkDispatch) => {
     console.log('load data logic', id)
     dispatch(loadDatasourceData());

@@ -34,8 +34,13 @@ if (root) {
                 /* here is your component tokens */
                 fontSize: 14,
                 iconFontSize: 16,
+                itemColor: '#fff',
+                // lastItemColor: '#fff',
                 linkHoverColor: '#3778ff'
               },
+              Avatar: {
+                // containerSizeLG: 100
+              }
             }
           }}
         >

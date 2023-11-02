@@ -2,6 +2,7 @@
 import styles from './styles.scss'
 import excel from '@/assets/dslogo/excel.png';
 import csv from '@/assets/dslogo/csv.png';
+import { useState } from 'react';
 const dsMap = [
   {
     title: 'excel',
@@ -9,19 +10,20 @@ const dsMap = [
     type: 'excel',
     img: excel
   },
-  {
-    title: 'csv',
-    category: 'upload',
-    type: 'csv',
-    img: csv
-  }
+  // {
+  //   title: 'csv',
+  //   category: 'upload',
+  //   type: 'csv',
+  //   img: csv
+  // }
 ]
 interface IProp {
   onChange: (type: string, category: string) => void
 }
 function DSSelection(props: IProp) {
-  const onSelect = (type: string, category: string) => {
-    console.log('type', type);
+  const [curItem, setCurItem] = useState('');
+  const onSelect = (title: string, type: string, category: string) => {
+    setCurItem(title)
     props.onChange(type, category);
   }
   return (
@@ -31,7 +33,7 @@ function DSSelection(props: IProp) {
       justifyContent: 'flex-start',
     }}>
       {dsMap.map(ds => (
-        <div key={ds.title} className={styles['ds-item']}><img src={ds.img} style={{ height: '80%' }} onClick={() => onSelect(ds.type, ds.category)}></img></div>
+        <div key={ds.title} className={styles[curItem == ds.title ? 'ds-item-active' : 'ds-item']} id={`datasource-${ds.title}`}><img src={ds.img} style={{ height: '80%' }} onClick={() => onSelect(ds.title, ds.type, ds.category)}></img></div>
       ))}
     </div>
   )

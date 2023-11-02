@@ -10,7 +10,7 @@ export const createDatasourceByExcel = (formData: any): Promise<any> => request.
   data: formData
 })
 
-export const fetchDatasourceData = (id: string, page: number, row: number): Promise<any> => request.get({
+export const fetchDatasourceData = (id: string | number | null, page: number, row: number): Promise<any> => request.get({
   url: '/api/datasource/data',
   params: { id, page, row }
 })
