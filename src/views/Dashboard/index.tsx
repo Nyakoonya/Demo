@@ -40,7 +40,7 @@ function Dashboard(props: Iprops) {
       id: '1',
       title: 'ComponentsLibrary',
       icon: InboxOutlined,
-      children: <ComLib limit={10} datasourceFieldsList={fieldList}></ComLib>
+      children: <ComLib limit={10} datasourceFieldsList={fieldList} onClearActive={props.changeActiveReport}></ComLib>
     },
     // {
     //   id: '2',

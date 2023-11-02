@@ -8,6 +8,7 @@ import { ThunkDispatch } from "redux-thunk";
 import { addDatasourcelogic } from "@/redux/actionCreators/entities/datasource/logic";
 import { Action, Dispatch } from "redux";
 import { IRootState } from "@/redux/Store";
+import { MyThunkDispatch } from "@/redux/typing";
 interface IProp {
   folderId: string,
   addDatasource: (payload: { folderId: string, type: string, data: any }) => void
@@ -67,7 +68,7 @@ function DSCreation(props: IProp) {
     }
   }
   return (
-    <Modal title="Datasource Creation" btnLabel="Create a datasource" width={800} footer={null} ref={modalRef}>
+    <Modal title="Datasource Creation" btnLabel="Create a datasource" width={800} footer={null} ref={modalRef} extraBtn>
       <Steps current={current} items={items} size="small" />
       <div>{steps[current].content}</div>
       <div style={{ marginTop: 24, display: 'flex', justifyContent: 'flex-end' }}>
@@ -95,7 +96,7 @@ const mapStateToProps = (state: IRootState) => {
 
   }
 }
-const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, Action>) => {
+const mapDispatchToProps = (dispatch: MyThunkDispatch) => {
   return {
     addDatasource: (payload: { folderId: string, type: string, data: any }) => dispatch(addDatasourcelogic(payload))
   }

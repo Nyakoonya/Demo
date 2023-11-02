@@ -23,6 +23,15 @@ const service = new Request({
       return err;
     },
     responseInterceptor: (res) => {
+      if (res.data) {
+        const data = res.data
+        if (data.code === 0) {
+          return data
+        } else {
+          message.error(data.msg);
+          return data;
+        }
+      }
       return res;
     },
     responseInterceptorCatch: (err) => {
@@ -36,7 +45,7 @@ const service = new Request({
           localStorage.removeItem('token');
           localStorage.removeItem('userData');
         }).then(() => {
-          message.error(err.message)
+          message.error(err.response ? err.response.data.msg : err.message)
         }).then(() => {
           history.push('/login');
         })

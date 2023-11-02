@@ -6,10 +6,11 @@ import { IRootState } from "@/redux/Store";
 import { IReport } from "@/redux/reducers/ReportReducer";
 import { saveReportsUnderDash } from "@/service/modules/reports";
 import { Avatar, Breadcrumb, Button, Drawer, message } from "antd";
-import { HomeOutlined, MenuOutlined, SaveOutlined } from "@ant-design/icons";
+import { DownloadOutlined, HomeOutlined, MenuOutlined, SaveOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import routes from "@/router/home";
 import IntroPage from "../IntroPage";
+import innerDownload from "@/utils/innerDownload";
 interface Iprops {
   children: any,
   reports: IReport[],
@@ -101,6 +102,10 @@ function Layout(props: Iprops) {
     },
   ].concat(extraBreadcrumbItems);
 
+  const handleDownloadDoc = () => {
+    innerDownload("/static/Manual of Data Visualizer.docx", "Manual of Data Visualizer.docx");
+  }
+
   return (
     <div>
       <header>
@@ -111,6 +116,10 @@ function Layout(props: Iprops) {
             </div>
           </div>
           <div className={styles['header-right']}>
+            <div onClick={handleDownloadDoc} className={styles['saveBtn-box']}>
+              <DownloadOutlined style={{ fontSize: '1.5rem', fontWeight: 200 }} />
+              <span style={{ fontSize: '0.8rem', marginTop: '.4rem' }}>Download Doc</span>
+            </div>
             {visibility &&
               <><div onClick={handleSaveReports} className={styles['saveBtn-box']}>
                 <SaveOutlined style={{ fontSize: '1.5rem', fontWeight: 200 }} />

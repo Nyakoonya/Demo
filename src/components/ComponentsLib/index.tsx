@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { Button, Divider, Form, Input, InputNumber, Select, message } from 'antd';
 import { components, others } from '../../lib/index';
 import FeildSelection, { IDimension } from "../FeildSelection";
@@ -15,7 +15,8 @@ interface IProp {
   datasourceFieldsList: IDimension[],
   loadReport: (payload: any) => void,
   activeReport: IReport | null,
-  reports: IReport[]
+  reports: IReport[],
+  onClearActive: any
 }
 function ComLib(props: IProp): ReactNode {
   const dimensionRef = useRef<any>(null);
@@ -66,11 +67,11 @@ function ComLib(props: IProp): ReactNode {
     } else {
     }
   }
-  const handleChangeTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeTitle = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target && e.target.value != null) {
-      setReportTitle(e.target.value)
+      setReportTitle(e.target.value);
     }
-  }
+  }, [])
   const handleDone = () => {
     const dimensions = dimensionRef.current && dimensionRef.current.onPropsChange() || [];
     const measures = measureRef.current && measureRef.current.onPropsChange() || [];
@@ -92,6 +93,7 @@ function ComLib(props: IProp): ReactNode {
       })) : [],
     }
     // redux logic
+    console.log('defaultReportTitle', defaultReportTitle)
     const target = props.reports.find(r => r.id === activeReport)
     console.log('target', target)
     if (target) {
@@ -115,6 +117,7 @@ function ComLib(props: IProp): ReactNode {
         limit
       })
     }
+    props.onClearActive()
 
   }
   const handleChangeLimit = (value: number | null) => {
@@ -130,7 +133,7 @@ function ComLib(props: IProp): ReactNode {
             value={defaultCompType}
             onChange={handleSelectCompType}
             options={compTypes}
-            allowClear={true}
+          // allowClear={true}
           ></Select>
         </FormItem>
         <Divider>Data Settings</Divider>

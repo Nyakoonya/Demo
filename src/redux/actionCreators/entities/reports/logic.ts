@@ -72,9 +72,10 @@ export const loadReportLogic = (payload: {
     const activeReport = state.constant.activeReport;
     // content
     if (!payload.id) {
+      console.log('payload.title', payload.title)
       const newItem = generateContent(state.reports.entity.length);
       payload.id = newItem.id;
-      payload.title = newItem.title;
+      payload.title = payload.title;
       payload.content = newItem.content
       fetchReportData(
         payload
