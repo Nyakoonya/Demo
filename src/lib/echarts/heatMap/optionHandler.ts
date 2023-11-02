@@ -1,10 +1,10 @@
 import 'echarts-extension-gmap';
 const optionHandler = (content: any, data: any) => {
-  const { series, center } = data;
+  const { series, center, zoomLevel } = data;
   const option = {
     gmap: {
       center,
-      zoom: 10,
+      zoom: zoomLevel,
       renderOnMoving: true,
       echartsLayerZIndex: 2019,
       roam: true
