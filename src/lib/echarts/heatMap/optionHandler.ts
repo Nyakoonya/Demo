@@ -1,9 +1,9 @@
 import 'echarts-extension-gmap';
 const optionHandler = (content: any, data: any) => {
-  const { series } = data;
+  const { series, center } = data;
   const option = {
     gmap: {
-      center: [10.7389, 59.9133],
+      center,
       zoom: 10,
       renderOnMoving: true,
       echartsLayerZIndex: 2019,
